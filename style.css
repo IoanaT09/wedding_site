@@ -206,6 +206,7 @@ a { color: inherit; }
 
 /* ============ Hero ============ */
 .hero {
+    position: relative;
     min-height: 100svh;
     display: flex;
     flex-direction: column;
@@ -214,8 +215,9 @@ a { color: inherit; }
     text-align: center;
     padding: 40px 20px;
     background:
-            radial-gradient(circle at 50% 20%, rgba(169,131,75,0.10), transparent 60%),
-            var(--paper);
+            linear-gradient(180deg, rgba(36,38,31,0.55), rgba(36,38,31,0.72)),
+            url('hero-photo.jpeg') 20% 90% / cover no-repeat;
+
 }
 
 .eyebrow {
@@ -227,6 +229,7 @@ a { color: inherit; }
     margin-bottom: 18px;
 }
 .eyebrow.light { color: var(--gold); }
+.hero .eyebrow { color: var(--gold); }
 
 .names {
     font-family: var(--display);
@@ -236,18 +239,20 @@ a { color: inherit; }
     color: var(--ink);
     line-height: 1.05;
 }
+.hero .names { color: var(--paper); text-shadow: 0 2px 18px rgba(0,0,0,0.35); }
 .amp {
     font-style: italic;
     font-weight: 300;
     color: var(--wine);
     padding: 0 0.08em;
 }
+.hero .amp { color: var(--gold); }
 
 .hero-date {
     font-family: var(--utility);
     letter-spacing: 0.1em;
     font-size: 1rem;
-    color: var(--ink);
+    color: var(--paper);
     margin-top: 18px;
 }
 
