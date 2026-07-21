@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ioana &amp; [Partner] — 3 October</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+
+<!-- ===================== ENVELOPE INTRO ===================== -->
+<div id="envelope-screen">
+    <button id="lang-toggle-env" class="lang-toggle" aria-label="Switch language">EN</button>
+    <div class="envelope" id="envelope">
+        <div class="env-back"></div>
+        <div class="env-letter">
+            <p class="letter-eyebrow lang lang-en" hidden>You are invited</p>
+            <p class="letter-eyebrow lang lang-ro">Sunteți invitați</p>
+            <p class="letter-names">Ioana <span class="amp">&amp;</span> Rareș</p>
+            <p class="letter-date">3 . 10 . 2026</p>
+        </div>
+        <div class="env-flap"></div>
+        <div class="env-seal" id="seal">
+            <span>I&amp;R</span>
+        </div>
+    </div>
+    <p class="tap-hint lang lang-en" hidden>tap the seal to open</p>
+    <p class="tap-hint lang lang-ro">apasă sigiliul pentru a deschide</p>
+</div>
+
+<!-- ===================== SITE ===================== -->
+<div id="site" hidden>
+
+    <!-- language toggle -->
+    <button id="lang-toggle" class="lang-toggle" aria-label="Switch language">RO</button>
+
+    <!-- HERO -->
+    <header class="hero reveal" data-reveal="fade-up">
+        <p class="eyebrow lang lang-en">We're getting married</p>
+        <p class="eyebrow lang lang-ro" hidden>Ne căsătorim</p>
+        <h1 class="names">Ioana <span class="amp">&amp;</span> [Partner]</h1>
+        <p class="hero-date">3 October 2026 · Vienna</p>
+        <div class="hero-rule" aria-hidden="true"></div>
+    </header>
+
+    <!-- STORY / WELCOME -->
+    <section class="section paper" id="welcome">
+        <div class="crease" aria-hidden="true"></div>
+        <div class="section-inner reveal" data-reveal="fade-up">
+            <p class="eyebrow lang lang-en">Dear guest</p>
+            <p class="eyebrow lang lang-ro" hidden>Dragă invitat</p>
+            <p class="body-text lang lang-en">
+                After [X] years together, we're finally making it official — and we'd love nothing more
+                than to celebrate with the people who mean the most to us. Replace this paragraph with
+                your own story: how you met, a favourite memory, or simply a warm welcome.
+            </p>
+            <p class="body-text lang lang-ro" hidden>
+                După [X] ani împreună, în sfârșit facem pasul cel mare — și nu ne-am dori nimic mai mult
+                decât să sărbătorim alături de oamenii care contează cel mai mult pentru noi. Înlocuiește
+                acest paragraf cu povestea voastră: cum v-ați cunoscut, o amintire dragă, sau pur și simplu
+                un bun venit călduros.
+            </p>
+        </div>
+    </section>
+
+    <!-- DETAILS -->
+    <section class="section ink" id="details">
+        <div class="section-inner">
+            <p class="eyebrow light lang lang-en reveal" data-reveal="fade-up">The details</p>
+            <p class="eyebrow light lang lang-ro" hidden data-reveal="fade-up">Detalii</p>
+
+            <div class="details-grid">
+                <div class="detail-card reveal" data-reveal="fade-up">
+                    <p class="detail-label lang lang-en">Ceremony</p>
+                    <p class="detail-label lang lang-ro" hidden>Ceremonia</p>
+                    <p class="detail-value">3 October 2026 · 15:00</p>
+                    <p class="detail-sub">[Church / venue name], Vienna</p>
+                </div>
+                <div class="detail-card reveal" data-reveal="fade-up">
+                    <p class="detail-label lang lang-en">Reception</p>
+                    <p class="detail-label lang lang-ro" hidden>Petrecerea</p>
+                    <p class="detail-value">3 October 2026 · 18:00</p>
+                    <p class="detail-sub">[Reception venue name], Vienna</p>
+                </div>
+                <div class="detail-card reveal" data-reveal="fade-up">
+                    <p class="detail-label lang lang-en">Dress code</p>
+                    <p class="detail-label lang lang-ro" hidden>Ținută</p>
+                    <p class="detail-value">[Formal / Garden / etc.]</p>
+                    <p class="detail-sub lang lang-en">Comfortable shoes recommended</p>
+                    <p class="detail-sub lang lang-ro" hidden>Recomandăm pantofi comozi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="section paper" id="timeline">
+        <div class="crease" aria-hidden="true"></div>
+        <div class="section-inner">
+            <p class="eyebrow lang lang-en reveal" data-reveal="fade-up">How the day unfolds</p>
+            <p class="eyebrow lang lang-ro" hidden data-reveal="fade-up">Cum se desfășoară ziua</p>
+
+            <ol class="timeline">
+                <li class="reveal" data-reveal="fade-left"><span class="time">14:30</span><span class="event lang lang-en">Guests arrive</span><span class="event lang lang-ro" hidden>Sosirea invitaților</span></li>
+                <li class="reveal" data-reveal="fade-left"><span class="time">15:00</span><span class="event lang lang-en">Ceremony</span><span class="event lang lang-ro" hidden>Ceremonia</span></li>
+                <li class="reveal" data-reveal="fade-left"><span class="time">16:00</span><span class="event lang lang-en">Photos &amp; drinks</span><span class="event lang lang-ro" hidden>Poze &amp; cocktail</span></li>
+                <li class="reveal" data-reveal="fade-left"><span class="time">18:00</span><span class="event lang lang-en">Dinner &amp; reception</span><span class="event lang lang-ro" hidden>Cină &amp; petrecere</span></li>
+                <li class="reveal" data-reveal="fade-left"><span class="time">21:00</span><span class="event lang lang-en">First dance &amp; party</span><span class="event lang lang-ro" hidden>Primul dans &amp; distracție</span></li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- RSVP -->
+    <section class="section ink" id="rsvp">
+        <div class="section-inner center reveal" data-reveal="fade-up">
+            <p class="eyebrow light lang lang-en">Kindly reply by</p>
+            <p class="eyebrow light lang lang-ro" hidden>Vă rugăm confirmați până la</p>
+            <p class="rsvp-deadline">1 September 2026</p>
+            <a href="YOUR_GOOGLE_FORM_LINK" target="_blank" rel="noopener" class="rsvp-btn">
+                <span class="lang lang-en">RSVP</span>
+                <span class="lang lang-ro" hidden>Confirmă prezența</span>
+            </a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>Ioana <span class="amp">&amp;</span> Rareș · 3.10.2026</p>
+    </footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="script.js?v=3"></script>
+</body>
+</html>

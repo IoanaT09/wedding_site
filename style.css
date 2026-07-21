@@ -1,0 +1,424 @@
+/* ============ Tokens ============ */
+:root {
+    --paper: #F6F1E7;
+    --paper-dark: #EDE5D3;
+    --ink: #24261F;
+    --wine: #5C1F2E;
+    --wine-light: #7A2C3F;
+    --gold: #A9834B;
+    --sage: #6B7457;
+    --display: 'Fraunces', serif;
+    --body: 'Cormorant Garamond', serif;
+    --utility: 'Jost', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--ink);
+    color: var(--ink);
+    font-family: var(--body);
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+a { color: inherit; }
+
+/* ============ Envelope intro ============ */
+#envelope-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding: 24px 16px;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.envelope {
+    position: relative;
+    width: min(340px, 80vw);
+    height: min(230px, 54vw);
+    /* Reserve room above for the letter, which juts up out of the envelope
+       as it slides open. Without this, the letter's top is clipped on
+       short/small screens. */
+    margin-top: min(200px, 46vw);
+    perspective: 1200px;
+}
+
+.env-back {
+    position: absolute;
+    inset: 0;
+    background: var(--paper-dark);
+    border-radius: 4px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    z-index: 1;
+}
+
+.env-letter {
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    top: 5%;
+    height: 90%;
+    background: var(--paper);
+    border-radius: 3px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.6s cubic-bezier(.22,.68,0,1.21) 0.6s;
+    z-index: 0;
+}
+
+.letter-eyebrow {
+    font-family: var(--utility);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    color: var(--sage);
+    margin: 0;
+}
+.letter-names {
+    font-family: var(--display);
+    font-size: clamp(1.3rem, 5vw, 1.8rem);
+    margin: 4px 0;
+    color: var(--ink);
+}
+.letter-date {
+    font-family: var(--utility);
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    color: var(--wine);
+    margin: 0;
+}
+
+.env-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 52%;
+    background: var(--paper);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform 1s cubic-bezier(.6,0,.4,1);
+    backface-visibility: hidden;
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.env-seal {
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    width: 62px;
+    height: 62px;
+    background: radial-gradient(circle at 35% 30%, var(--wine-light), var(--wine) 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 3;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.4), inset 0 0 8px rgba(0,0,0,0.3);
+    transition: transform 0.4s ease, opacity 0.5s ease;
+}
+.env-seal span {
+    font-family: var(--display);
+    color: var(--paper);
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+}
+.env-seal:hover { transform: translate(-50%, -50%) scale(1.06); }
+
+/* opened state */
+.envelope.open .env-flap {
+    transform: rotateX(160deg);
+}
+.envelope.open .env-seal {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.4);
+}
+.envelope.open .env-letter {
+    transform: translateY(-100%);
+}
+
+.tap-hint {
+    font-family: var(--utility);
+    color: var(--paper-dark);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    opacity: 0.7;
+}
+
+#envelope-screen.hide {
+    animation: fadeOutScreen 0.8s ease forwards;
+    pointer-events: none;
+}
+@keyframes fadeOutScreen {
+    to { opacity: 0; visibility: hidden; }
+}
+
+/* ============ Site shell ============ */
+#site { background: var(--paper); }
+
+.lang-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 50;
+    font-family: var(--utility);
+    letter-spacing: 0.08em;
+    font-size: 0.75rem;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 7px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease;
+}
+.lang-toggle:hover { background: var(--gold); color: var(--paper); }
+.lang-toggle:focus-visible, a:focus-visible, .rsvp-btn:focus-visible {
+    outline: 2px solid var(--wine);
+    outline-offset: 3px;
+}
+
+/* ============ Hero ============ */
+.hero {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+    background:
+            radial-gradient(circle at 50% 20%, rgba(169,131,75,0.10), transparent 60%),
+            var(--paper);
+}
+
+.eyebrow {
+    font-family: var(--utility);
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    font-size: 0.75rem;
+    color: var(--wine);
+    margin-bottom: 18px;
+}
+.eyebrow.light { color: var(--gold); }
+
+.names {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(2.6rem, 9vw, 5.5rem);
+    margin: 0;
+    color: var(--ink);
+    line-height: 1.05;
+}
+.amp {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--wine);
+    padding: 0 0.08em;
+}
+
+.hero-date {
+    font-family: var(--utility);
+    letter-spacing: 0.1em;
+    font-size: 1rem;
+    color: var(--ink);
+    margin-top: 18px;
+}
+
+.hero-rule {
+    width: 1px;
+    height: 60px;
+    background: var(--gold);
+    margin-top: 34px;
+}
+
+/* ============ Sections ============ */
+.section { position: relative; padding: 110px 24px; }
+.section.paper { background: var(--paper); }
+.section.ink { background: var(--ink); color: var(--paper); }
+
+.section-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+}
+.section-inner.center { display: flex; flex-direction: column; align-items: center; }
+
+.crease {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(92,31,46,0.25), transparent);
+}
+
+.body-text {
+    font-size: 1.25rem;
+    line-height: 1.75;
+    color: var(--ink);
+    font-weight: 400;
+}
+
+/* ============ Details ============ */
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 44px;
+}
+@media (max-width: 720px) {
+    .details-grid { grid-template-columns: 1fr; }
+}
+.detail-card {
+    border: 1px solid rgba(246,241,231,0.18);
+    padding: 30px 20px;
+    border-radius: 2px;
+}
+.detail-label {
+    font-family: var(--utility);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.7rem;
+    color: var(--gold);
+    margin: 0 0 12px;
+}
+.detail-value {
+    font-family: var(--display);
+    font-size: 1.4rem;
+    margin: 0 0 6px;
+}
+.detail-sub {
+    font-size: 1rem;
+    color: rgba(246,241,231,0.7);
+    margin: 0;
+}
+
+/* ============ Timeline ============ */
+.timeline {
+    list-style: none;
+    margin: 50px auto 0;
+    padding: 0;
+    max-width: 460px;
+    text-align: left;
+}
+.timeline li {
+    display: flex;
+    gap: 22px;
+    align-items: baseline;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(36,38,31,0.12);
+}
+.timeline li:last-child { border-bottom: none; }
+.time {
+    font-family: var(--utility);
+    letter-spacing: 0.06em;
+    color: var(--wine);
+    font-size: 0.9rem;
+    width: 56px;
+    flex-shrink: 0;
+}
+.event { font-size: 1.15rem; }
+
+/* ============ RSVP ============ */
+.rsvp-deadline {
+    font-family: var(--display);
+    font-size: 1.6rem;
+    margin: 10px 0 30px;
+}
+.rsvp-btn {
+    display: inline-block;
+    font-family: var(--utility);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--gold);
+    padding: 16px 44px;
+    border-radius: 999px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.rsvp-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(169,131,75,0.35); }
+
+.footer {
+    text-align: center;
+    padding: 40px;
+    background: var(--ink);
+    color: rgba(246,241,231,0.5);
+    font-family: var(--utility);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+}
+
+/* ============ Scroll reveal ============ */
+.reveal {
+    opacity: 0;
+    transition: opacity 0.9s ease, transform 0.9s cubic-bezier(.16,.84,.44,1);
+}
+.reveal[data-reveal="fade-up"] { transform: translateY(36px); }
+.reveal[data-reveal="fade-left"] { transform: translateX(-28px); }
+.reveal.visible { opacity: 1; transform: translate(0,0); }
+
+/* ============ Phone tuning ============ */
+@media (max-width: 600px) {
+    /* Tighter vertical rhythm so sections aren't a scroll marathon */
+    .section { padding: 68px 22px; }
+    .hero { padding: 48px 22px; }
+
+    /* Body copy sized for a hand, not a monitor */
+    .body-text { font-size: 1.12rem; line-height: 1.7; }
+    .hero-date { font-size: 0.95rem; }
+
+    /* Rein in wide letter-spacing that can push past the screen edge */
+    .eyebrow { letter-spacing: 0.16em; font-size: 0.7rem; }
+
+    /* Details cards: a touch less padding when stacked full-width */
+    .details-grid { gap: 18px; margin-top: 34px; }
+    .detail-card { padding: 24px 20px; }
+    .detail-value { font-size: 1.3rem; }
+
+    /* Timeline: keep time column snug beside the event text */
+    .timeline { margin-top: 38px; }
+    .timeline li { gap: 16px; }
+    .time { width: 48px; }
+    .event { font-size: 1.08rem; }
+
+    .rsvp-deadline { font-size: 1.4rem; }
+    .rsvp-btn { padding: 15px 38px; }
+
+    /* Nudge the language toggle in from the corner + comfy tap size */
+    .lang-toggle { top: 14px; right: 14px; padding: 9px 15px; }
+
+    .footer { padding: 34px 22px; }
+}
+
+/* Very small phones (older/compact devices) */
+@media (max-width: 360px) {
+    .names { font-size: 2.3rem; }
+    .section { padding: 56px 18px; }
+}
