@@ -25,10 +25,10 @@ function openEnvelope() {
     opening = true;
     envelopeScreen.classList.add('is-opening');
 
-    // The site is revealed while the backdrop is still dissolving, so the
-    // letter appears to open onto the hero rather than cut to it.
-    setTimeout(showSite, reduceMotion ? 120 : 1500);
-    setTimeout(() => envelopeScreen.remove(), reduceMotion ? 320 : 2350);
+    // The hero must already be painted underneath before the intro lifts
+    // away, or the curtain would come up on an empty stage.
+    setTimeout(showSite, reduceMotion ? 120 : 1950);
+    setTimeout(() => envelopeScreen.remove(), reduceMotion ? 320 : 2950);
 }
 
 // <button> handles Enter and Space natively, so click is the only listener needed.
