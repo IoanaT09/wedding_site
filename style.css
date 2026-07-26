@@ -219,7 +219,10 @@ a { color: inherit; }
     height: 90%;
     background: linear-gradient(165deg, #FDFAF3, var(--paper) 55%);
     border-radius: var(--radius-sm);
-    box-shadow: var(--shadow-soft);
+    /* Strong and offset downwards on purpose. The letter rises across the
+       dark wine lining, where a soft 35% shadow is invisible — and without a
+       shadow the eye reads the overlap as clipping rather than depth. */
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.55), 0 3px 8px rgba(0, 0, 0, 0.4);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -297,7 +300,9 @@ a { color: inherit; }
    the wrong way. */
 .flap-inner {
     transform: rotateY(180deg);
-    background: linear-gradient(165deg, #4A1725, var(--wine) 45%, var(--wine-light));
+    /* Darker towards the fold, so the standing flap reads as a surface
+       angled away from the light rather than a flat wine triangle. */
+    background: linear-gradient(180deg, #3A1119 0%, var(--wine) 55%, var(--wine-light) 100%);
 }
 
 .env-seal {
@@ -439,11 +444,15 @@ a { color: inherit; }
 }
 
 /* The flap travels backwards in Z as it opens, so the rising letter passes
-   in front of it. Overshooting 180° and settling back reads as paper. */
+   in front of it. It stops at 150° rather than lying flat at 180°: a flat
+   flap becomes a triangle sitting in exactly the space the letter rises
+   into, so the letter covers all of it and the lining survives only as a
+   fringe — which looks like clipping. Left standing, it stays foreshortened
+   and clearly behind. The overshoot past the resting angle reads as paper. */
 @keyframes flap-open {
     0%   { transform: translateZ(7px) rotateX(0deg); }
-    62%  { transform: translateZ(2px) rotateX(-192deg); }
-    100% { transform: translateZ(-3px) rotateX(-180deg); }
+    62%  { transform: translateZ(2px) rotateX(-159deg); }
+    100% { transform: translateZ(-3px) rotateX(-150deg); }
 }
 
 /* The letter holds Z=2 throughout. It must stay behind the front panel at
