@@ -17,9 +17,6 @@
     --on-dark: #F4EEE2;
     --on-dark-muted: rgba(244, 238, 226, 0.82);
 
-    /* Scrim laid over photographs so text on top of them stays readable. */
-    --scrim: linear-gradient(rgba(20, 21, 17, 0.58), rgba(20, 21, 17, 0.66));
-
     /* Engraved diamond lattice — the dark counterpart to the paper sections.
        One 44px tile, drawn inline, so it stays crisp at any zoom and costs
        nothing to download. Edge dots are halved on purpose: neighbouring
@@ -60,7 +57,6 @@
     /* ---- Surface ---- */
     --radius-sm: 3px;
     --radius-pill: 999px;
-    --hairline: 1px solid rgba(34, 36, 30, 0.12);
     --hairline-light: 1px solid rgba(244, 238, 226, 0.22);
     --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.35);
     --shadow-deep: 0 20px 60px rgba(0, 0, 0, 0.5);
@@ -530,6 +526,9 @@ a { color: inherit; }
    HERO
    ======================================================================== */
 .hero {
+    /* Which part of the photo to keep when it's cropped. The only knob you
+       should need to touch if the crop looks wrong on a given screen. */
+    --hero-focus: 20% 90%;
     position: relative;
     min-height: 100svh;
     display: flex;
@@ -538,9 +537,11 @@ a { color: inherit; }
     justify-content: center;
     text-align: center;
     padding: var(--space-xl) var(--gutter);
+    /* Graded rather than flat: the photo stays open at the top and darkens
+       towards the bottom, where the type sits. */
     background:
-            var(--scrim),
-            url('hero-photo.jpeg') 20% 90% / cover no-repeat;
+            linear-gradient(180deg, rgba(20, 21, 17, 0.3) 0%, rgba(20, 21, 17, 0.5) 45%, rgba(20, 21, 17, 0.78) 100%),
+            url('hero-photo.jpeg') var(--hero-focus) / cover no-repeat;
 }
 
 .eyebrow {
@@ -581,8 +582,8 @@ a { color: inherit; }
 
 .hero-rule {
     width: 1px;
-    height: 60px;
-    background: var(--gold);
+    height: 64px;
+    background: linear-gradient(var(--gold), rgba(189, 149, 87, 0));
     margin-top: var(--space-lg);
 }
 
@@ -604,11 +605,26 @@ a { color: inherit; }
 }
 .section-inner.center { display: flex; flex-direction: column; align-items: center; }
 
+/* Divider between paper sections: a hairline that fades out at both ends,
+   with a small gold lozenge set into the middle of it. */
 .crease {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(92, 31, 46, 0.25), transparent);
+    background: linear-gradient(90deg,
+            transparent, rgba(92, 31, 46, 0.22) 28%, rgba(92, 31, 46, 0.22) 72%, transparent);
+}
+.crease::after {
+    content: '';
+    position: absolute;
+    top: -3.5px;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    margin-left: -3.5px;
+    background: var(--paper);
+    border: 1px solid var(--gold);
+    transform: rotate(45deg);
 }
 
 .body-text {
@@ -625,17 +641,38 @@ a { color: inherit; }
 .details-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-md);
-    margin-top: var(--space-lg);
+    gap: var(--space-lg) var(--space-md);
+    margin-top: var(--space-xl);
 }
 @media (max-width: 720px) {
     .details-grid { grid-template-columns: 1fr; }
+    /* Stacked, the boxes would read as a list of unrelated cards. A rule
+       between them is enough to separate one from the next. */
+    .detail-card + .detail-card {
+        border-top: var(--hairline-light);
+        padding-top: var(--space-lg);
+    }
 }
-.detail-card {
-    border: var(--hairline-light);
-    padding: var(--space-lg) var(--space-md);
-    border-radius: 2px;
+
+/* Open, not boxed: a short gold rule does the work the border was doing. */
+.detail-card { padding: 0 var(--space-2xs); }
+.detail-card::before {
+    content: '';
+    display: block;
+    width: 26px;
+    height: 1px;
+    margin: 0 auto var(--space-md);
+    background: var(--gold);
+    opacity: 0.85;
 }
+@media (max-width: 720px) {
+    .detail-card + .detail-card::before { margin-top: var(--space-2xs); }
+}
+
+/* Each card arrives just after the one before it. */
+.details-grid .reveal,
+.timeline .reveal { transition-delay: calc(var(--i, 0) * 0.09s); }
+
 .detail-label {
     font-family: var(--utility);
     text-transform: uppercase;
@@ -659,28 +696,57 @@ a { color: inherit; }
 /* ===========================================================================
    TIMELINE
    ======================================================================== */
+/* A rail with a dot per moment, rather than a stack of ruled rows.
+   --rail-x is derived from the column and gap so the line, the dots and the
+   text can never drift out of alignment. */
 .timeline {
+    --time-col: 3.2rem;
+    --rail-gap: 1.5rem;
+    --rail-x: calc(var(--time-col) + var(--rail-gap) / 2);
+    position: relative;
     list-style: none;
-    margin: var(--space-lg) auto 0;
+    margin: var(--space-xl) auto 0;
     padding: 0;
-    max-width: 460px;
+    max-width: 26rem;
     text-align: left;
 }
-.timeline li {
-    display: flex;
-    gap: var(--space-md);
-    align-items: baseline;
-    padding: var(--space-sm) 0;
-    border-bottom: var(--hairline);
+/* The rail fades out at both ends instead of stopping dead. */
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0.9rem;
+    bottom: 0.9rem;
+    left: var(--rail-x);
+    width: 1px;
+    background: linear-gradient(rgba(92, 31, 46, 0), rgba(92, 31, 46, 0.28) 12%, rgba(92, 31, 46, 0.28) 88%, rgba(92, 31, 46, 0));
 }
-.timeline li:last-child { border-bottom: none; }
+.timeline li {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--time-col) 1fr;
+    column-gap: var(--rail-gap);
+    align-items: baseline;
+    padding: var(--space-xs) 0;
+}
+/* The ring is paper-coloured, so the dot appears to interrupt the rail. */
+.timeline li::before {
+    content: '';
+    position: absolute;
+    left: var(--rail-x);
+    top: 1.15rem;
+    width: 7px;
+    height: 7px;
+    margin-left: -3px;
+    border-radius: 50%;
+    background: var(--wine);
+    box-shadow: 0 0 0 4px var(--paper);
+}
 .time {
     font-family: var(--utility);
     letter-spacing: 0.06em;
     color: var(--wine);
     font-size: var(--text-sm);
-    width: 3.5rem;
-    flex-shrink: 0;
+    text-align: right;
 }
 .event { font-size: var(--text-base); }
 
@@ -706,16 +772,20 @@ a { color: inherit; }
     transition: transform var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
 }
 .rsvp-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(189, 149, 87, 0.35); }
+.rsvp-btn:active { transform: translateY(0); box-shadow: none; }
 
 .footer {
     text-align: center;
     padding: var(--space-xl) var(--gutter);
     background: var(--wine-deep);
-    color: rgba(244, 238, 226, 0.55);
+    color: rgba(244, 238, 226, 0.6);
     font-family: var(--utility);
     font-size: var(--text-xs);
-    letter-spacing: 0.08em;
+    letter-spacing: var(--tracking-wide);
+    border-top: 1px solid rgba(189, 149, 87, 0.25);
 }
+.footer p { margin: 0; }
+.footer .amp { color: var(--gold); }
 
 /* ===========================================================================
    SCROLL REVEAL

@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=9">
+    <link rel="stylesheet" href="style.css?v=10">
 
     <!-- Text is injected from content.js, so with JS off there is nothing to
          show. Hide the envelope and explain, rather than sit on a dead page. -->
@@ -105,18 +105,19 @@
                 <p class="eyebrow light" data-i18n="details.eyebrow"></p>
             </div>
 
+            <!-- --i staggers each item's reveal; see .details-grid .reveal -->
             <div class="details-grid">
-                <div class="detail-card reveal" data-reveal="fade-up">
+                <div class="detail-card reveal" data-reveal="fade-up" style="--i:0">
                     <p class="detail-label" data-i18n="details.ceremony.label"></p>
                     <p class="detail-value" data-i18n="details.ceremony.value"></p>
                     <p class="detail-sub" data-i18n="details.ceremony.sub"></p>
                 </div>
-                <div class="detail-card reveal" data-reveal="fade-up">
+                <div class="detail-card reveal" data-reveal="fade-up" style="--i:1">
                     <p class="detail-label" data-i18n="details.reception.label"></p>
                     <p class="detail-value" data-i18n="details.reception.value"></p>
                     <p class="detail-sub" data-i18n="details.reception.sub"></p>
                 </div>
-                <div class="detail-card reveal" data-reveal="fade-up">
+                <div class="detail-card reveal" data-reveal="fade-up" style="--i:2">
                     <p class="detail-label" data-i18n="details.dress.label"></p>
                     <p class="detail-value" data-i18n="details.dress.value"></p>
                     <p class="detail-sub" data-i18n="details.dress.sub"></p>
@@ -134,11 +135,11 @@
             </div>
 
             <ol class="timeline">
-                <li class="reveal" data-reveal="fade-left"><span class="time">14:30</span><span class="event" data-i18n="timeline.arrival"></span></li>
-                <li class="reveal" data-reveal="fade-left"><span class="time">15:00</span><span class="event" data-i18n="timeline.ceremony"></span></li>
-                <li class="reveal" data-reveal="fade-left"><span class="time">16:00</span><span class="event" data-i18n="timeline.photos"></span></li>
-                <li class="reveal" data-reveal="fade-left"><span class="time">18:00</span><span class="event" data-i18n="timeline.dinner"></span></li>
-                <li class="reveal" data-reveal="fade-left"><span class="time">21:00</span><span class="event" data-i18n="timeline.dance"></span></li>
+                <li class="reveal" data-reveal="fade-left" style="--i:0"><span class="time">14:30</span><span class="event" data-i18n="timeline.arrival"></span></li>
+                <li class="reveal" data-reveal="fade-left" style="--i:1"><span class="time">15:00</span><span class="event" data-i18n="timeline.ceremony"></span></li>
+                <li class="reveal" data-reveal="fade-left" style="--i:2"><span class="time">16:00</span><span class="event" data-i18n="timeline.photos"></span></li>
+                <li class="reveal" data-reveal="fade-left" style="--i:3"><span class="time">18:00</span><span class="event" data-i18n="timeline.dinner"></span></li>
+                <li class="reveal" data-reveal="fade-left" style="--i:4"><span class="time">21:00</span><span class="event" data-i18n="timeline.dance"></span></li>
             </ol>
         </div>
     </section>
@@ -158,7 +159,7 @@
 
 </div>
 
-<script src="content.js?v=9"></script>
-<script src="script.js?v=9"></script>
+<script src="content.js?v=10"></script>
+<script src="script.js?v=10"></script>
 </body>
 </html>
