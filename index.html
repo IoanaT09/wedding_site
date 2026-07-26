@@ -20,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=11">
+    <link rel="stylesheet" href="style.css?v=12">
 
     <!-- Text is injected from content.js, so with JS off there is nothing to
          show. Hide the envelope and explain, rather than sit on a dead page. -->
@@ -166,14 +166,11 @@
                 </div>
             </div>
 
+            <!-- The calendar file is built in script.js from the same strings
+                 shown above, so there is no second copy of the details to
+                 keep in step. -->
             <div class="calendar reveal" data-reveal="fade-up">
-                <p class="calendar-label" data-i18n="details.calendar"></p>
-                <p class="calendar-links">
-                    <a target="_blank" rel="noopener" data-i18n="details.calendar.google"
-                       href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Ioana%20%26%20Rare%C8%99%20%E2%80%94%20Wedding&amp;dates=20261003T130000Z/20261003T230000Z&amp;location=Vienna&amp;details=https://YOUR_SITE_URL/"></a>
-                    <span class="calendar-sep" aria-hidden="true">·</span>
-                    <a href="wedding.ics" download data-i18n="details.calendar.ics"></a>
-                </p>
+                <button type="button" class="calendar-btn" id="calendar-btn" data-i18n="details.calendar"></button>
             </div>
         </div>
     </section>
@@ -222,7 +219,7 @@
 
 </div>
 
-<script src="content.js?v=11"></script>
-<script src="script.js?v=11"></script>
+<script src="content.js?v=12"></script>
+<script src="script.js?v=12"></script>
 </body>
 </html>

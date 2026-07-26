@@ -711,22 +711,22 @@ a { color: inherit; }
 
 /* ============ Add to calendar ============ */
 .calendar { margin-top: var(--space-xl); }
-.calendar-label {
+.calendar-btn {
+    appearance: none;
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(189, 149, 87, 0.45);
+    padding: 0 0 3px;
+    cursor: pointer;
     font-family: var(--utility);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wide);
     font-size: var(--text-xs);
-    color: var(--on-dark-muted);
-    margin: 0 0 var(--space-2xs);
-}
-.calendar-links { margin: 0; font-family: var(--utility); font-size: var(--text-sm); }
-.calendar-links a {
     color: var(--gold);
-    text-decoration: none;
-    border-bottom: 1px solid rgba(189, 149, 87, 0.45);
+    transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease;
 }
-.calendar-links a:hover { color: var(--on-dark); border-bottom-color: var(--on-dark); }
-.calendar-sep { color: var(--on-dark-muted); margin: 0 var(--space-2xs); }
+.calendar-btn:hover { color: var(--on-dark); border-bottom-color: var(--on-dark); }
+.calendar-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
 
 /* ============ Countdown ============ */
 .countdown-section { padding-block: var(--space-xl); }

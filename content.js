@@ -11,7 +11,6 @@
 //  Elsewhere:
 //    - the RSVP link (href in index.html, currently YOUR_GOOGLE_FORM_LINK)
 //    - the map links (hrefs in index.html, currently REPLACE+WITH+ADDRESS)
-//    - the venue names and times in wedding.ics
 //    - YOUR_SITE_URL in the share-preview tags in index.html
 // ============================================================================
 
@@ -56,8 +55,7 @@ const CONTENT = {
         'details.dress.sub': 'Recomandăm pantofi comozi',
         'details.map': 'Vezi harta',
         'details.calendar': 'Adaugă în calendar',
-        'details.calendar.google': 'Google Calendar',
-        'details.calendar.ics': 'Descarcă .ics',
+        'calendar.summary': 'Nunta Ioanei și a lui Rareș',
 
         'countdown.eyebrow': 'Până în ziua cea mare',
         'countdown.days': 'zile',
@@ -105,8 +103,7 @@ const CONTENT = {
         'details.dress.sub': 'Comfortable shoes recommended',
         'details.map': 'View map',
         'details.calendar': 'Add to calendar',
-        'details.calendar.google': 'Google Calendar',
-        'details.calendar.ics': 'Download .ics',
+        'calendar.summary': 'Ioana & Rareș — Wedding',
 
         'countdown.eyebrow': 'Until the day',
         'countdown.days': 'days',

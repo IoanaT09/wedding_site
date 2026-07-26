@@ -140,6 +140,59 @@ function buildGallery() {
 buildGallery();
 setLang(currentLang);   // fills in the alt text on the tiles just created
 
+// ============ Add to calendar ============
+// The .ics is assembled on demand from the same dictionary entries the page
+// displays, so the calendar entry can never disagree with the page.
+const calendarBtn = document.getElementById('calendar-btn');
+
+function icsEscape(text) {
+    return String(text).replace(/[\\;,]/g, m => '\\' + m).replace(/\n/g, '\\n');
+}
+
+function icsStamp(date) {
+    return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+}
+
+function buildIcs() {
+    const dict = CONTENT[currentLang];
+    const start = new Date(WEDDING);
+    const end = new Date(start.getTime() + 9 * 3600 * 1000);   // through the reception
+
+    const description = [
+        dict['details.ceremony.label'] + ': ' + dict['details.ceremony.value'],
+        dict['details.reception.label'] + ': ' + dict['details.reception.value'],
+        dict['details.reception.sub']
+    ].join('\n');
+
+    return [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Ioana & Rares//Wedding//EN',
+        'BEGIN:VEVENT',
+        'UID:wedding-' + icsStamp(start) + '@ioana-rares',
+        'DTSTAMP:' + icsStamp(new Date()),
+        'DTSTART:' + icsStamp(start),
+        'DTEND:' + icsStamp(end),
+        'SUMMARY:' + icsEscape(dict['calendar.summary']),
+        'LOCATION:' + icsEscape(dict['details.ceremony.sub']),
+        'DESCRIPTION:' + icsEscape(description),
+        'END:VEVENT',
+        'END:VCALENDAR'
+    ].join('\r\n');                       // CRLF is required by the spec
+}
+
+if (calendarBtn) {
+    calendarBtn.addEventListener('click', () => {
+        const blob = new Blob([buildIcs()], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'ioana-rares-2026-10-03.ics';
+        link.click();
+        URL.revokeObjectURL(url);
+    });
+}
+
 // ============ Countdown ============
 const countdownUnits = document.getElementById('countdown-units');
 const countdownPast = document.querySelector('.countdown-past');
