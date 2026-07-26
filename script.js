@@ -1,33 +1,40 @@
+// Guests who asked their browser to calm down get the same sequence, just quickly.
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 // ============ Envelope intro ============
 const envelopeScreen = document.getElementById('envelope-screen');
 const envelope = document.getElementById('envelope');
 const seal = document.getElementById('seal');
 const site = document.getElementById('site');
 
+function showSite() {
+    site.hidden = false;
+    document.body.style.overflow = '';
+    // The hero is excluded from the scroll observer, so reveal it by hand.
+    requestAnimationFrame(() => {
+        document.querySelectorAll('.hero.reveal').forEach(el => el.classList.add('visible'));
+    });
+}
+
 function openEnvelope() {
     envelope.classList.add('open');
 
-    // Reveal the site underneath once the letter has slid out
     setTimeout(() => {
-        site.hidden = false;
+        showSite();
         envelopeScreen.classList.add('hide');
-        document.body.style.overflow = '';
-        // Trigger the hero's own reveal once it's visible
-        requestAnimationFrame(() => {
-            document.querySelectorAll('.hero.reveal').forEach(el => el.classList.add('visible'));
-        });
-    }, 1800);
+    }, reduceMotion ? 150 : 1800);
 
     setTimeout(() => {
         envelopeScreen.remove();
-    }, 2700);
+    }, reduceMotion ? 400 : 2700);
 }
 
+// <button> handles Enter and Space natively, so click is the only listener needed.
 seal.addEventListener('click', openEnvelope);
-seal.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') openEnvelope();
-});
 document.body.style.overflow = 'hidden';
+
+// If anything below throws, the page must not be left locked behind a dead envelope.
+window.addEventListener('error', showSite);
 
 // ============ Language toggle (EN / RO) ============
 // There are two toggles — one on the envelope landing screen, one in the site.
@@ -50,6 +57,8 @@ langToggles.forEach(btn => {
 setLang('ro');
 
 // ============ Scroll reveal ============
+// Note: .reveal is never placed on a language-swapped element — a hidden element
+// never intersects, so it would stay invisible after switching language.
 const revealEls = document.querySelectorAll('.reveal:not(.hero)');
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
