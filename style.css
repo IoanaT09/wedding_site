@@ -146,10 +146,10 @@ a { color: inherit; }
     --env-w: min(78vw, 44svh, 420px);
     --env-h: calc(var(--env-w) * 230 / 340);
     width: var(--env-w);
-    /* Headroom for the letter as it rises out (it travels ~68% of its own
-       height). Derived from --env-h, so resizing the envelope or retuning
-       the travel distance keeps the two in step. */
-    padding-top: calc(var(--env-h) * 0.62);
+    /* Headroom for the letter as it rises out. It travels 85% of its own
+       height, and its own height is 90% of the envelope's, so it clears the
+       top edge by 0.85 x 0.90 = 0.765 of --env-h. Rounded up for margin. */
+    padding-top: calc(var(--env-h) * 0.8);
     perspective: 1100px;
     perspective-origin: 50% 45%;
 }
@@ -242,11 +242,17 @@ a { color: inherit; }
     position: absolute;
     inset: 0;
     background:
-            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 340 230' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='%23000' stroke-opacity='.08' stroke-width='1'%3E%3Cpath d='M0 0 170 118 340 0'/%3E%3Cpath d='M0 230 170 118 340 230'/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat,
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 340 230' preserveAspectRatio='none'%3E%3Cpath d='M0 230 170 118 340 230' fill='none' stroke='%23000' stroke-opacity='.08' stroke-width='1'/%3E%3C/svg%3E") center / 100% 100% no-repeat,
             linear-gradient(155deg, var(--paper) 0%, var(--paper-dark) 60%, #E4DAC5 100%);
     border-radius: 4px;
     transform: translateZ(6px);
-    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.08);
+    /* Only the lower seams are drawn. The upper two used to be there as well,
+       and while the flap covers them exactly when closed, opening the flap
+       took its edges away and left a painted V sitting in front of the
+       letter — which read as the inside of the envelope being on top of it.
+       The upward shadow is the envelope's lip falling across the letter
+       behind it: without it the two meet at a hard line and look cut. */
+    box-shadow: 0 -9px 18px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 /* Letter type scales with the envelope (cq units), not the viewport. */
@@ -462,9 +468,9 @@ a { color: inherit; }
    The overshoot at 82% is what makes it feel drawn out by hand. */
 @keyframes letter-rise {
     0%   { transform: translateZ(2px) translateY(0) rotateZ(0deg); }
-    55%  { transform: translateZ(2px) translateY(-38%) rotateZ(-0.6deg); }
-    82%  { transform: translateZ(2px) translateY(-66%) rotateZ(0.5deg); }
-    100% { transform: translateZ(2px) translateY(-60%) rotateZ(0deg); }
+    55%  { transform: translateZ(2px) translateY(-52%) rotateZ(-0.6deg); }
+    82%  { transform: translateZ(2px) translateY(-90%) rotateZ(0.5deg); }
+    100% { transform: translateZ(2px) translateY(-85%) rotateZ(0deg); }
 }
 
 /* The intro leaves whole — envelope, letter and backdrop as one object.
