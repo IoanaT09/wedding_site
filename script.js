@@ -26,8 +26,8 @@ function openEnvelope() {
 
     // The hero is put in place just before the intro starts to leave, so
     // both halves of the reveal move together. Keep in step with --t-exit.
-    setTimeout(showSite, reduceMotion ? 120 : 1700);
-    setTimeout(() => envelopeScreen.remove(), reduceMotion ? 320 : 2800);
+    setTimeout(showSite, reduceMotion ? 120 : 2200);
+    setTimeout(() => envelopeScreen.remove(), reduceMotion ? 320 : 3300);
 }
 
 // <button> handles Enter and Space natively, so click is the only listener needed.
