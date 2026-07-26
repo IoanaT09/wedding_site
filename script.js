@@ -9,11 +9,10 @@ const site = document.getElementById('site');
 
 function showSite() {
     site.hidden = false;
+    // Starts the hero's entrance, which is timed to run against the intro
+    // leaving rather than as a fade of its own.
+    site.classList.add('is-entering');
     document.body.style.overflow = '';
-    // The hero is excluded from the scroll observer, so reveal it by hand.
-    requestAnimationFrame(() => {
-        document.querySelectorAll('.hero.reveal').forEach(el => el.classList.add('visible'));
-    });
 }
 
 // The choreography itself lives in style.css; JS only starts it and then
@@ -25,10 +24,10 @@ function openEnvelope() {
     opening = true;
     envelopeScreen.classList.add('is-opening');
 
-    // The hero must already be painted underneath before the intro lifts
-    // away, or the curtain would come up on an empty stage.
-    setTimeout(showSite, reduceMotion ? 120 : 1950);
-    setTimeout(() => envelopeScreen.remove(), reduceMotion ? 320 : 2950);
+    // The hero is put in place just before the intro starts to leave, so
+    // both halves of the reveal move together. Keep in step with --t-exit.
+    setTimeout(showSite, reduceMotion ? 120 : 1700);
+    setTimeout(() => envelopeScreen.remove(), reduceMotion ? 320 : 2800);
 }
 
 // <button> handles Enter and Space natively, so click is the only listener needed.
@@ -230,7 +229,7 @@ if (!updateCountdown()) {
 // ============ Scroll reveal ============
 // Note: .reveal is never placed on a language-swapped element — a hidden element
 // never intersects, so it would stay invisible after switching language.
-const revealEls = document.querySelectorAll('.reveal:not(.hero)');
+const revealEls = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {

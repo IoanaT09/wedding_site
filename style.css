@@ -116,8 +116,7 @@ a { color: inherit; }
     --t-seal:   0.12s;   /* wax cracks */
     --t-flap:   0.15s;   /* flap swings open */
     --t-letter: 0.55s;   /* letter rises out */
-    --t-parts:  1.15s;   /* envelope fades, leaving the letter alone */
-    --t-lift:   2.05s;   /* the whole intro lifts away */
+    --t-exit:   1.75s;   /* the whole intro leaves, hero rises to meet it */
 }
 
 #envelope-screen {
@@ -207,7 +206,9 @@ a { color: inherit; }
     background: linear-gradient(150deg, var(--paper-dark), #E2D8C2);
     border-radius: 4px;
     box-shadow: var(--shadow-deep);
-    transform: translateZ(0);
+    /* The depth ladder, back to front: back 0, letter 2, front 6, flap 7,
+       seal 9. The letter must stay between 0 and 6 for its whole travel. */
+    transform: translateZ(0px);
 }
 
 .env-letter {
@@ -397,25 +398,19 @@ a { color: inherit; }
 /* will-change is set only for the sequence; the whole screen is removed
    from the DOM afterwards, so the hint is never left switched on. */
 #envelope-screen.is-opening .env-flap {
-    animation: flap-open 0.9s var(--ease-flap) var(--t-flap) forwards,
-               fade-out 0.45s ease var(--t-parts) forwards;
-    will-change: transform, opacity;
+    animation: flap-open 0.9s var(--ease-flap) var(--t-flap) forwards;
+    will-change: transform;
 }
-/* The letter is never scaled — that is what kept its type crisp and made
-   fading the text unnecessary. */
+/* The letter is never scaled — that is what keeps its type crisp. */
 #envelope-screen.is-opening .env-letter {
     animation: letter-rise 0.9s var(--ease-out) var(--t-letter) forwards;
     will-change: transform;
 }
-#envelope-screen.is-opening .env-back,
-#envelope-screen.is-opening .env-pocket,
-#envelope-screen.is-opening .env-shadow {
-    animation: fade-out 0.5s ease var(--t-parts) forwards;
-}
-/* Then the whole intro slides up and off, uncovering the hero beneath it
-   like a curtain going up. */
+/* One exit for the whole intro. The envelope used to fade out separately
+   before the screen left, which read as two competing events. */
 #envelope-screen.is-opening {
-    animation: intro-lift 0.8s cubic-bezier(.5, 0, .2, 1) var(--t-lift) forwards;
+    animation: intro-exit 0.95s cubic-bezier(.55, 0, .25, 1) var(--t-exit) forwards;
+    will-change: transform;
 }
 #envelope-screen.is-opening .tap-hint,
 #envelope-screen.is-opening #lang-toggle-env {
@@ -451,17 +446,30 @@ a { color: inherit; }
     100% { transform: translateZ(-3px) rotateX(-180deg); }
 }
 
-/* Rises past its resting place and settles back — the small overshoot at 82%
-   is what makes it feel drawn out by hand rather than driven by a motor. */
+/* The letter holds Z=2 throughout. It must stay behind the front panel at
+   Z=6 for the whole rise — that is what makes it emerge from the envelope
+   rather than slide across it. It doesn't need to come forward to clear the
+   flap, because the flap has already travelled back to Z=-3 by then.
+   The overshoot at 82% is what makes it feel drawn out by hand. */
 @keyframes letter-rise {
     0%   { transform: translateZ(2px) translateY(0) rotateZ(0deg); }
-    55%  { transform: translateZ(9px) translateY(-38%) rotateZ(-0.6deg); }
-    82%  { transform: translateZ(12px) translateY(-66%) rotateZ(0.5deg); }
-    100% { transform: translateZ(12px) translateY(-60%) rotateZ(0deg); }
+    55%  { transform: translateZ(2px) translateY(-38%) rotateZ(-0.6deg); }
+    82%  { transform: translateZ(2px) translateY(-66%) rotateZ(0.5deg); }
+    100% { transform: translateZ(2px) translateY(-60%) rotateZ(0deg); }
 }
 
-@keyframes intro-lift {
-    to { transform: translateY(-108%); }
+/* The intro leaves whole — envelope, letter and backdrop as one object.
+   Nothing fades; the only motion is this and the hero rising to meet it. */
+@keyframes intro-exit {
+    to { transform: translateY(-102%); }
+}
+
+/* The page doesn't just sit there waiting to be uncovered: it lifts and
+   settles into place as the cover leaves. The two moving at different rates
+   is what gives the reveal depth without it being showy. */
+@keyframes hero-settle {
+    from { transform: translateY(6%) scale(1.06); }
+    to   { transform: translateY(0) scale(1); }
 }
 
 /* Should a browser lack 3D transforms entirely, skip the theatre. */
@@ -487,6 +495,12 @@ a { color: inherit; }
    SITE SHELL
    ======================================================================== */
 #site { background: var(--paper); }
+
+/* Runs in step with intro-exit, so the cover leaving and the page arriving
+   are one movement rather than two. */
+#site.is-entering .hero {
+    animation: hero-settle 0.95s cubic-bezier(.25, .6, .2, 1) both;
+}
 
 .noscript-note {
     margin: 0;

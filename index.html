@@ -20,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=12">
+    <link rel="stylesheet" href="style.css?v=13">
 
     <!-- Text is injected from content.js, so with JS off there is nothing to
          show. Hide the envelope and explain, rather than sit on a dead page. -->
@@ -67,8 +67,8 @@
                     <p class="letter-date">3 . 10 . 2026</p>
                 </div>
 
-                <!-- Full envelope front with a V notched out of the top, so the
-                     letter is hidden behind it while the flap is closed. -->
+                <!-- Solid front panel; its V is drawn on, not cut out, so the
+                     letter behind it has nothing to show through. -->
                 <div class="env-pocket" aria-hidden="true"></div>
 
                 <div class="env-flap" aria-hidden="true">
@@ -94,8 +94,9 @@
     <!-- language toggle -->
     <button id="lang-toggle" class="lang-toggle" data-i18n-aria-label="a11y.lang"></button>
 
-    <!-- HERO -->
-    <header class="hero reveal" data-reveal="fade-up">
+    <!-- HERO — entrance is driven by #site.is-entering, not the scroll
+         observer, so it stays in step with the intro leaving. -->
+    <header class="hero">
         <p class="eyebrow" data-i18n="hero.eyebrow"></p>
         <h1 class="names">Ioana <span class="amp">&amp;</span> Rareș</h1>
         <p class="hero-date" data-i18n="hero.date"></p>
@@ -219,7 +220,7 @@
 
 </div>
 
-<script src="content.js?v=12"></script>
-<script src="script.js?v=12"></script>
+<script src="content.js?v=13"></script>
+<script src="script.js?v=13"></script>
 </body>
 </html>
