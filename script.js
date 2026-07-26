@@ -16,25 +16,55 @@ function showSite() {
     });
 }
 
+// The choreography itself lives in style.css; JS only starts it and then
+// hands over to the site once the letter has grown to fill the screen.
+let opening = false;
+
 function openEnvelope() {
-    envelope.classList.add('open');
+    if (opening) return;          // a second tap must not restart the sequence
+    opening = true;
+    envelopeScreen.classList.add('is-opening');
 
-    setTimeout(() => {
-        showSite();
-        envelopeScreen.classList.add('hide');
-    }, reduceMotion ? 150 : 1800);
-
-    setTimeout(() => {
-        envelopeScreen.remove();
-    }, reduceMotion ? 400 : 2700);
+    // The site is revealed while the backdrop is still dissolving, so the
+    // letter appears to open onto the hero rather than cut to it.
+    setTimeout(showSite, reduceMotion ? 120 : 1500);
+    setTimeout(() => envelopeScreen.remove(), reduceMotion ? 320 : 2350);
 }
 
 // <button> handles Enter and Space natively, so click is the only listener needed.
 seal.addEventListener('click', openEnvelope);
+// Tapping the envelope works too — nobody should have to hit a small circle
+// to open their own invitation. The seal is the affordance, not the gate.
+envelope.addEventListener('click', openEnvelope);
 document.body.style.overflow = 'hidden';
 
 // If anything below throws, the page must not be left locked behind a dead envelope.
-window.addEventListener('error', showSite);
+window.addEventListener('error', () => {
+    showSite();
+    envelopeScreen.remove();
+});
+
+// ============ Pointer tilt ============
+// Desktop only: phones get the idle float in CSS instead. deviceorientation
+// is deliberately not used — on iOS it would greet every guest with a
+// permission dialog for the sake of a few degrees of parallax.
+if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    let queued = false;
+    let tiltX = 0;
+    let tiltY = 0;
+
+    envelopeScreen.addEventListener('mousemove', (e) => {
+        tiltY = (e.clientX / window.innerWidth - 0.5) * 12;
+        tiltX = (e.clientY / window.innerHeight - 0.5) * -8;
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(() => {
+            envelope.style.setProperty('--tilt-x', tiltX.toFixed(2) + 'deg');
+            envelope.style.setProperty('--tilt-y', tiltY.toFixed(2) + 'deg');
+            queued = false;
+        });
+    });
+}
 
 // ============ Language (RO / EN) ============
 // Every string comes from CONTENT in content.js, keyed by the data-i18n

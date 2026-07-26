@@ -99,54 +99,114 @@ body::after {
 a { color: inherit; }
 
 /* ===========================================================================
-   ENVELOPE INTRO
+   ENVELOPE INTRO — a real 3D scene
+
+   Depth is expressed with translateZ, not z-index, so occlusion is handled
+   by the browser: the letter sits at Z=2 and is genuinely hidden behind the
+   pocket at Z=6 until it clears the top edge.
+
+   The whole sequence is choreographed by the delays below. Retiming the
+   animation means editing these six values and nothing else.
    ======================================================================== */
+:root {
+    --t-seal:   0.12s;   /* wax cracks */
+    --t-flap:   0.15s;   /* flap swings open */
+    --t-letter: 0.55s;   /* letter rises */
+    --t-parts:  1.25s;   /* envelope fades away */
+    --t-text:   1.30s;   /* letter's text fades */
+    --t-expand: 1.45s;   /* letter grows to fill the screen */
+}
+
 #envelope-screen {
     position: fixed;
     inset: 0;
-    background:
-            var(--scrim),
-            url('background envelope.jpg') center / cover no-repeat;
-    background-color: var(--ink);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: var(--space-lg);
     padding: var(--space-md) var(--gutter);
-    overflow-y: auto;
     z-index: 100;
+    /* No overflow / opacity / filter here: this is an ancestor of the 3D
+       scene and any of those would flatten it. The exit fade is applied to
+       .env-scrim (a sibling of the stage) for exactly this reason. */
+}
+
+.env-scrim {
+    position: absolute;
+    inset: 0;
+    background:
+            var(--scrim),
+            url('background envelope.jpg') center / cover no-repeat;
+    background-color: var(--ink);
+}
+
+.env-stage {
+    position: relative;
+    --env-w: min(78vw, 44svh, 420px);
+    --env-h: calc(var(--env-w) * 230 / 340);
+    width: var(--env-w);
+    /* Headroom for the letter as it rises out (it travels ~68% of its own
+       height). Derived from --env-h, so resizing the envelope or retuning
+       the travel distance keeps the two in step. */
+    padding-top: calc(var(--env-h) * 0.62);
+    perspective: 1100px;
+    perspective-origin: 50% 45%;
+}
+
+@media (min-width: 700px) {
+    .env-stage { --env-w: min(52vw, 48svh, 600px); }
 }
 
 .envelope {
     position: relative;
+    width: 100%;
+    height: var(--env-h);
     container-type: inline-size;
-    --env-w: min(340px, 80vw);
-    width: var(--env-w);
-    aspect-ratio: 340 / 230;
-    /* Reserve room above for the letter, which juts up out of the envelope
-       as it slides open. Tied to --env-w (rather than its own fixed/vw cap)
-       so it always scales together with the envelope and never falls short. */
-    margin-top: calc(var(--env-w) * 0.575);
-    perspective: 1200px;
+    transform-style: preserve-3d;
+    /* Pointer tilt, fed by script.js. Absent (mobile), both default to 0. */
+    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition: transform 0.35s var(--ease-out);
 }
 
-/* On wider viewports the 80vw sizing above collapses to a small fixed cap.
-   Scale up instead so the envelope keeps commanding the window. aspect-ratio
-   and margin-top both recalculate from --env-w automatically. */
-@media (min-width: 700px) {
-    .envelope {
-        --env-w: min(70vw, 90vh, 960px);
-    }
+/* The idle float lives on its own layer so it never fights with the tilt
+   above it or the exit animations below it. */
+.env-body {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    animation: env-float 7s ease-in-out infinite;
+}
+
+@keyframes env-float {
+    0%, 100% { transform: translateY(0) rotateY(-2.5deg); }
+    50%      { transform: translateY(-1.5%) rotateY(2.5deg); }
+}
+
+/* An infinite animation forced to 0.001ms would repaint constantly. */
+@media (prefers-reduced-motion: reduce) {
+    .env-body { animation: none !important; }
+}
+
+/* Contact shadow. A soft gradient rather than filter: blur(), because a
+   filter would flatten this element out of the 3D context. */
+.env-shadow {
+    position: absolute;
+    left: 4%;
+    right: 4%;
+    bottom: -7%;
+    height: 16%;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0) 70%);
+    transform: translateZ(-1px);
 }
 
 .env-back {
     position: absolute;
     inset: 0;
-    background: var(--paper-dark);
+    background: linear-gradient(150deg, var(--paper-dark), #E2D8C2);
     border-radius: 4px;
     box-shadow: var(--shadow-deep);
-    z-index: 1;
+    transform: translateZ(0);
 }
 
 .env-letter {
@@ -155,7 +215,7 @@ a { color: inherit; }
     right: 6%;
     top: 5%;
     height: 90%;
-    background: var(--paper);
+    background: linear-gradient(165deg, #FDFAF3, var(--paper) 55%);
     border-radius: var(--radius-sm);
     box-shadow: var(--shadow-soft);
     display: flex;
@@ -165,8 +225,19 @@ a { color: inherit; }
     gap: var(--space-2xs);
     padding: var(--space-md);
     text-align: center;
-    transition: transform var(--dur-med) cubic-bezier(.22, .68, 0, 1.21) 0.6s;
-    z-index: 0;
+    transform: translateZ(2px);
+}
+
+/* Full envelope front, with a V notched out of the top for the flap. One
+   element instead of a pocket plus two side triangles. */
+.env-pocket {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(155deg, var(--paper) 0%, var(--paper-dark) 60%, #E4DAC5 100%);
+    border-radius: 4px;
+    clip-path: polygon(0 0, 50% 52%, 100% 0, 100% 100%, 0 100%);
+    transform: translateZ(6px);
+    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.08);
 }
 
 /* Letter type scales with the envelope (cq units), not the viewport. */
@@ -192,19 +263,35 @@ a { color: inherit; }
     margin: 0;
 }
 
+/* Two-sided flap: the old single plane simply vanished past 90° because it
+   was showing its own hidden backface. */
 .env-flap {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 52%;
-    background: var(--paper);
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
     transform-origin: top center;
-    transition: transform 1s var(--ease-flap);
+    transform-style: preserve-3d;
+    transform: translateZ(7px) rotateX(0deg);
+}
+.flap-face {
+    position: absolute;
+    inset: -1px 0 0 0;   /* 1px overlap — avoids a hairline seam on iOS */
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
     backface-visibility: hidden;
-    z-index: 2;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    -webkit-backface-visibility: hidden;
+}
+.flap-outer {
+    background: linear-gradient(165deg, #FBF7EE, var(--paper) 50%, var(--paper-dark));
+}
+/* The lining. Flipped on Y, not X: the triangle is symmetric left-to-right,
+   so this reverses which way the face points without moving its silhouette.
+   Flipping on X would invert the triangle and leave the open flap pointing
+   the wrong way. */
+.flap-inner {
+    transform: rotateY(180deg);
+    background: linear-gradient(165deg, #4A1725, var(--wine) 45%, var(--wine-light));
 }
 
 .env-seal {
@@ -213,48 +300,151 @@ a { color: inherit; }
     top: 46%;
     width: 18cqw;
     height: 18cqw;
-    min-width: 44px;
-    min-height: 44px;
+    min-width: 46px;
+    min-height: 46px;
     max-width: 130px;
     max-height: 130px;
-    background: radial-gradient(circle at 35% 30%, var(--wine-light), var(--wine) 70%);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    /* Button reset — it's a real <button> so it's focusable and keyboard-operable. */
+    /* Button reset — it's a real <button> so it's focusable and keyboard-operable.
+       The wax itself is drawn by the two halves inside. */
     appearance: none;
     border: none;
     padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: none;
+    display: grid;
+    place-items: center;
     cursor: pointer;
-    z-index: 3;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4), inset 0 0 8px rgba(0, 0, 0, 0.3);
-    transition: transform var(--dur-fast) ease, opacity 0.5s ease;
+    transform: translate(-50%, -50%) translateZ(9px);
+    transition: transform var(--dur-fast) ease;
 }
-.env-seal span {
+.seal-half {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, var(--wine-light), var(--wine) 72%);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4), inset 0 0 8px rgba(0, 0, 0, 0.3);
+}
+/* Both halves carry the identical full circle and are clipped, so the wax
+   grain lines up perfectly until the moment it breaks. */
+.seal-left  { clip-path: inset(0 50% 0 0); }
+.seal-right { clip-path: inset(0 0 0 50%); }
+
+.seal-mark {
+    position: relative;
     font-family: var(--display);
     color: var(--paper);
     font-size: 4cqw;
     letter-spacing: 0.03em;
 }
-.env-seal:hover { transform: translate(-50%, -50%) scale(1.06); }
+/* The crack itself — invisible until the seal breaks. */
+.env-seal::before {
+    content: '';
+    position: absolute;
+    top: 6%;
+    bottom: 6%;
+    left: 50%;
+    width: 1px;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+}
+.env-seal:hover { transform: translate(-50%, -50%) translateZ(9px) scale(1.06); }
 .env-seal:focus-visible {
     outline: 2px solid var(--paper);
     outline-offset: 4px;
 }
 
-/* opened state */
-.envelope.open .env-flap {
-    transform: rotateX(160deg);
+/* ---------------- Opening sequence ---------------- */
+#envelope-screen.is-opening { pointer-events: none; }
+
+#envelope-screen.is-opening .env-seal {
+    animation: seal-press 0.12s ease forwards;
 }
-.envelope.open .env-seal {
-    opacity: 0;
-    pointer-events: none;
-    transform: translate(-50%, -50%) scale(0.4);
+#envelope-screen.is-opening .env-seal::before {
+    animation: seal-crack 0.5s ease var(--t-seal) forwards;
 }
-.envelope.open .env-letter {
-    transform: translateY(-100%);
+#envelope-screen.is-opening .seal-mark {
+    animation: fade-out 0.18s ease var(--t-seal) forwards;
+}
+#envelope-screen.is-opening .seal-left {
+    animation: seal-part-left 0.55s var(--ease-out) var(--t-seal) forwards;
+}
+#envelope-screen.is-opening .seal-right {
+    animation: seal-part-right 0.55s var(--ease-out) var(--t-seal) forwards;
+}
+
+/* will-change is set only for the sequence; the whole screen is removed
+   from the DOM afterwards, so the hint is never left switched on. */
+#envelope-screen.is-opening .env-flap {
+    animation: flap-open 0.9s var(--ease-flap) var(--t-flap) forwards,
+               fade-out 0.45s ease var(--t-parts) forwards;
+    will-change: transform, opacity;
+}
+#envelope-screen.is-opening .env-letter {
+    animation: letter-rise 0.85s var(--ease-out) var(--t-letter) forwards,
+               letter-expand 0.7s ease-in var(--t-expand) forwards;
+    will-change: transform, opacity;
+}
+#envelope-screen.is-opening .env-letter > * {
+    animation: fade-out 0.3s ease var(--t-text) forwards;
+}
+#envelope-screen.is-opening .env-back,
+#envelope-screen.is-opening .env-pocket,
+#envelope-screen.is-opening .env-shadow {
+    animation: fade-out 0.45s ease var(--t-parts) forwards;
+}
+#envelope-screen.is-opening .env-scrim {
+    animation: fade-out 0.7s ease 1.5s forwards;
+}
+#envelope-screen.is-opening .tap-hint,
+#envelope-screen.is-opening #lang-toggle-env {
+    animation: fade-out 0.25s ease forwards;
+}
+
+@keyframes fade-out { to { opacity: 0; } }
+
+@keyframes seal-press {
+    to { transform: translate(-50%, -50%) translateZ(9px) scale(0.93); }
+}
+@keyframes seal-crack {
+    0%   { opacity: 0; }
+    18%  { opacity: 1; }
+    100% { opacity: 0; }
+}
+@keyframes seal-part-left {
+    to { transform: translate(-16%, 26%) rotate(-15deg); opacity: 0; }
+}
+@keyframes seal-part-right {
+    to { transform: translate(16%, 26%) rotate(15deg); opacity: 0; }
+}
+
+/* The flap travels backwards in Z as it opens, so the rising letter passes
+   in front of it. Overshooting 180° and settling back reads as paper. */
+@keyframes flap-open {
+    0%   { transform: translateZ(7px) rotateX(0deg); }
+    62%  { transform: translateZ(2px) rotateX(-192deg); }
+    100% { transform: translateZ(-3px) rotateX(-180deg); }
+}
+
+@keyframes letter-rise {
+    0%   { transform: translateZ(2px) translateY(0) rotateZ(0deg); }
+    55%  { transform: translateZ(9px) translateY(-38%) rotateZ(-0.6deg); }
+    100% { transform: translateZ(12px) translateY(-68%) rotateZ(0.4deg); }
+}
+
+/* The text has already faded, so only a blank card scales up — scaling live
+   type would render it soft. */
+@keyframes letter-expand {
+    0%   { transform: translateZ(12px) translateY(-68%) rotateZ(0.4deg) scale(1); opacity: 1; }
+    65%  { opacity: 1; }
+    100% { transform: translateZ(12px) translateY(-58%) rotateZ(0deg) scale(3.4); opacity: 0; }
+}
+
+/* Should a browser lack 3D transforms entirely, skip the theatre. */
+@supports not (transform-style: preserve-3d) {
+    .flap-inner { display: none; }
+    #envelope-screen.is-opening .env-flap,
+    #envelope-screen.is-opening .env-letter {
+        animation: fade-out 0.4s ease forwards;
+    }
 }
 
 .tap-hint {
@@ -264,14 +454,7 @@ a { color: inherit; }
     text-transform: uppercase;
     font-size: var(--text-xs);
     opacity: 0.75;
-}
-
-#envelope-screen.hide {
-    animation: fadeOutScreen 0.8s ease forwards;
-    pointer-events: none;
-}
-@keyframes fadeOutScreen {
-    to { opacity: 0; visibility: hidden; }
+    position: relative;
 }
 
 /* ===========================================================================

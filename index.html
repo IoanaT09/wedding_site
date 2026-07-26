@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="style.css?v=7">
 
     <!-- Text is injected from content.js, so with JS off there is nothing to
          show. Hide the envelope and explain, rather than sit on a dead page. -->
@@ -30,21 +30,48 @@
     </p>
 </noscript>
 
-<!-- ===================== ENVELOPE INTRO ===================== -->
+<!-- ===================== ENVELOPE INTRO =====================
+     A real 3D scene: depth comes from translateZ, not z-index, so the
+     letter is occluded by the pocket until it clears the top edge.
+       .env-stage  owns the perspective (must stay free of overflow/opacity/
+                   filter — any of those would flatten the 3D context)
+       .envelope   owns the pointer tilt
+       .env-body   owns the idle float
+     ========================================================== -->
 <div id="envelope-screen">
+    <div class="env-scrim" aria-hidden="true"></div>
     <button id="lang-toggle-env" class="lang-toggle" data-i18n-aria-label="a11y.lang"></button>
-    <div class="envelope" id="envelope">
-        <div class="env-back"></div>
-        <div class="env-letter">
-            <p class="letter-eyebrow" data-i18n="envelope.eyebrow"></p>
-            <p class="letter-names">Ioana <span class="amp">&amp;</span> Rareș</p>
-            <p class="letter-date">3 . 10 . 2026</p>
+
+    <div class="env-stage">
+        <div class="envelope" id="envelope">
+            <div class="env-body">
+                <div class="env-shadow" aria-hidden="true"></div>
+                <div class="env-back" aria-hidden="true"></div>
+
+                <div class="env-letter">
+                    <p class="letter-eyebrow" data-i18n="envelope.eyebrow"></p>
+                    <p class="letter-names">Ioana <span class="amp">&amp;</span> Rareș</p>
+                    <p class="letter-date">3 . 10 . 2026</p>
+                </div>
+
+                <!-- Full envelope front with a V notched out of the top, so the
+                     letter is hidden behind it while the flap is closed. -->
+                <div class="env-pocket" aria-hidden="true"></div>
+
+                <div class="env-flap" aria-hidden="true">
+                    <div class="flap-face flap-outer"></div>
+                    <div class="flap-face flap-inner"></div>
+                </div>
+
+                <button type="button" class="env-seal" id="seal" data-i18n-aria-label="a11y.open">
+                    <span class="seal-half seal-left" aria-hidden="true"></span>
+                    <span class="seal-half seal-right" aria-hidden="true"></span>
+                    <span class="seal-mark">I&amp;R</span>
+                </button>
+            </div>
         </div>
-        <div class="env-flap"></div>
-        <button type="button" class="env-seal" id="seal" data-i18n-aria-label="a11y.open">
-            <span>I&amp;R</span>
-        </button>
     </div>
+
     <p class="tap-hint" data-i18n="envelope.hint"></p>
 </div>
 
@@ -131,7 +158,7 @@
 
 </div>
 
-<script src="content.js?v=6"></script>
-<script src="script.js?v=6"></script>
+<script src="content.js?v=7"></script>
+<script src="script.js?v=7"></script>
 </body>
 </html>
