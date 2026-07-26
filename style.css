@@ -1,15 +1,67 @@
-/* ============ Tokens ============ */
+/* ===========================================================================
+   TOKENS
+   Everything visual is defined once here. Sizes are fluid (clamp), so the
+   layout adapts between a 360px phone and a 1440px monitor without needing
+   a stack of breakpoints further down.
+   ======================================================================== */
 :root {
-    --paper: #F6F1E7;
+    /* ---- Colour ---- */
+    --paper: #F7F2E8;
     --paper-dark: #EDE5D3;
-    --ink: #24261F;
+    --ink: #22241E;
     --wine: #5C1F2E;
     --wine-light: #7A2C3F;
-    --gold: #A9834B;
+    --gold: #BD9557;          /* lightened from #A9834B so small gold text on dark stays legible */
     --sage: #6B7457;
-    --display: 'Fraunces', serif;
-    --body: 'Cormorant Garamond', serif;
-    --utility: 'Jost', sans-serif;
+    --on-dark: #F4EEE2;
+    --on-dark-muted: rgba(244, 238, 226, 0.82);
+
+    /* Scrim laid over photographs so text on top of them stays readable. */
+    --scrim: linear-gradient(rgba(20, 21, 17, 0.58), rgba(20, 21, 17, 0.66));
+
+    /* ---- Type ---- */
+    --display: 'Fraunces', Georgia, serif;
+    --body: 'Cormorant Garamond', Georgia, serif;
+    --utility: 'Jost', system-ui, sans-serif;
+
+    --text-xs:      clamp(0.68rem, 0.65rem + 0.12vw, 0.78rem);   /* utility caps */
+    --text-sm:      clamp(0.8rem,  0.76rem + 0.2vw,  0.95rem);   /* utility */
+    --text-body-sm: clamp(0.95rem, 0.9rem  + 0.25vw, 1.1rem);    /* small serif */
+    --text-base:    clamp(1.08rem, 1rem    + 0.4vw,  1.3rem);    /* serif body */
+    --text-md:      clamp(1.25rem, 1.12rem + 0.6vw,  1.6rem);
+    --text-lg:      clamp(1.5rem,  1.25rem + 1.1vw,  2.2rem);
+    --text-xl:      clamp(2.5rem,  1.6rem  + 4.2vw,  5.4rem);    /* the names */
+
+    --tracking-wide: 0.14em;
+    --tracking-wider: 0.22em;
+    --leading-body: 1.75;
+
+    /* ---- Space ---- */
+    --space-2xs: 0.5rem;
+    --space-xs:  0.75rem;
+    --space-sm:  1rem;
+    --space-md:  1.5rem;
+    --space-lg:  clamp(1.75rem, 1.2rem + 2.5vw, 3rem);
+    --space-xl:  clamp(2.5rem,  1.5rem + 4vw,   5rem);
+    --space-2xl: clamp(3.75rem, 2.2rem + 6vw,   7rem);
+
+    --gutter: clamp(1.25rem, 0.8rem + 2.2vw, 2.5rem);
+    --measure: 64ch;
+
+    /* ---- Surface ---- */
+    --radius-sm: 3px;
+    --radius-pill: 999px;
+    --hairline: 1px solid rgba(34, 36, 30, 0.12);
+    --hairline-light: 1px solid rgba(244, 238, 226, 0.22);
+    --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.35);
+    --shadow-deep: 0 20px 60px rgba(0, 0, 0, 0.5);
+
+    /* ---- Motion ---- */
+    --ease-out: cubic-bezier(.16, .84, .44, 1);
+    --ease-flap: cubic-bezier(.6, 0, .4, 1);
+    --dur-fast: 0.25s;
+    --dur-med: 0.6s;
+    --dur-slow: 0.9s;
 }
 
 * { box-sizing: border-box; }
@@ -20,9 +72,23 @@ html, body {
     background: var(--ink);
     color: var(--ink);
     font-family: var(--body);
+    font-size: var(--text-base);
+    line-height: var(--leading-body);
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     overflow-x: hidden;
+}
+
+/* Paper grain. One inline SVG, no image request, sits above everything and
+   ignores pointer events. Keep the opacity low — it should be felt, not seen. */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    pointer-events: none;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -32,20 +98,22 @@ html, body {
 
 a { color: inherit; }
 
-/* ============ Envelope intro ============ */
+/* ===========================================================================
+   ENVELOPE INTRO
+   ======================================================================== */
 #envelope-screen {
     position: fixed;
     inset: 0;
     background:
-            linear-gradient(rgba(0,0,0,0.32), rgba(0,0,0,0.32)),
+            var(--scrim),
             url('background envelope.jpg') center / cover no-repeat;
     background-color: var(--ink);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 28px;
-    padding: 24px 16px;
+    gap: var(--space-lg);
+    padding: var(--space-md) var(--gutter);
     overflow-y: auto;
     z-index: 100;
 }
@@ -63,11 +131,9 @@ a { color: inherit; }
     perspective: 1200px;
 }
 
-/* On wider viewports (tablet/desktop) the 80vw-based sizing above shrinks
-   the envelope down to a small fixed cap. Scale it up instead so it keeps
-   taking up a substantial share of the window no matter how big the
-   browser gets. aspect-ratio (set above) keeps the proportions correct
-   automatically, and margin-top recalculates from --env-w automatically too. */
+/* On wider viewports the 80vw sizing above collapses to a small fixed cap.
+   Scale up instead so the envelope keeps commanding the window. aspect-ratio
+   and margin-top both recalculate from --env-w automatically. */
 @media (min-width: 700px) {
     .envelope {
         --env-w: min(70vw, 90vh, 960px);
@@ -79,7 +145,7 @@ a { color: inherit; }
     inset: 0;
     background: var(--paper-dark);
     border-radius: 4px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    box-shadow: var(--shadow-deep);
     z-index: 1;
 }
 
@@ -90,31 +156,30 @@ a { color: inherit; }
     top: 5%;
     height: 90%;
     background: var(--paper);
-    border-radius: 3px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-soft);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 20px;
+    gap: var(--space-2xs);
+    padding: var(--space-md);
     text-align: center;
-    transition: transform 0.6s cubic-bezier(.22,.68,0,1.21) 0.6s;
+    transition: transform var(--dur-med) cubic-bezier(.22, .68, 0, 1.21) 0.6s;
     z-index: 0;
 }
 
+/* Letter type scales with the envelope (cq units), not the viewport. */
 .letter-eyebrow {
     font-family: var(--utility);
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    font-size: 0.65rem;
     font-size: clamp(0.65rem, 3cqw, 1.15rem);
     color: var(--sage);
     margin: 0;
 }
 .letter-names {
     font-family: var(--display);
-    font-size: clamp(1.3rem, 5vw, 1.8rem);
     font-size: clamp(1.3rem, 6cqw, 2.7rem);
     margin: 4px 0;
     color: var(--ink);
@@ -122,7 +187,6 @@ a { color: inherit; }
 .letter-date {
     font-family: var(--utility);
     letter-spacing: 0.1em;
-    font-size: 0.75rem;
     font-size: clamp(0.75rem, 3.5cqw, 1.3rem);
     color: var(--wine);
     margin: 0;
@@ -137,19 +201,17 @@ a { color: inherit; }
     background: var(--paper);
     clip-path: polygon(0 0, 100% 0, 50% 100%);
     transform-origin: top center;
-    transition: transform 1s cubic-bezier(.6,0,.4,1);
+    transition: transform 1s var(--ease-flap);
     backface-visibility: hidden;
     z-index: 2;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .env-seal {
     position: absolute;
     left: 50%;
     top: 46%;
-    width: 62px;
     width: 18cqw;
-    height: 62px;
     height: 18cqw;
     min-width: 44px;
     min-height: 44px;
@@ -167,13 +229,12 @@ a { color: inherit; }
     justify-content: center;
     cursor: pointer;
     z-index: 3;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.4), inset 0 0 8px rgba(0,0,0,0.3);
-    transition: transform 0.4s ease, opacity 0.5s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4), inset 0 0 8px rgba(0, 0, 0, 0.3);
+    transition: transform var(--dur-fast) ease, opacity 0.5s ease;
 }
 .env-seal span {
     font-family: var(--display);
     color: var(--paper);
-    font-size: 0.85rem;
     font-size: 4cqw;
     letter-spacing: 0.03em;
 }
@@ -199,10 +260,10 @@ a { color: inherit; }
 .tap-hint {
     font-family: var(--utility);
     color: var(--paper-dark);
-    letter-spacing: 0.14em;
+    letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
-    font-size: 0.7rem;
-    opacity: 0.7;
+    font-size: var(--text-xs);
+    opacity: 0.75;
 }
 
 #envelope-screen.hide {
@@ -213,36 +274,38 @@ a { color: inherit; }
     to { opacity: 0; visibility: hidden; }
 }
 
-/* ============ Site shell ============ */
+/* ===========================================================================
+   SITE SHELL
+   ======================================================================== */
 #site { background: var(--paper); }
 
 .noscript-note {
     margin: 0;
-    padding: 22vh 24px;
+    padding: 22vh var(--gutter);
     min-height: 100svh;
     background: var(--paper);
     color: var(--ink);
     text-align: center;
     font-family: var(--utility);
-    font-size: 0.95rem;
+    font-size: var(--text-sm);
     letter-spacing: 0.06em;
 }
 
 .lang-toggle {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: var(--space-md);
+    right: var(--space-md);
     z-index: 50;
     font-family: var(--utility);
     letter-spacing: 0.08em;
-    font-size: 0.75rem;
+    font-size: var(--text-sm);
     background: transparent;
     border: 1px solid var(--gold);
     color: var(--gold);
-    padding: 7px 14px;
-    border-radius: 999px;
+    padding: var(--space-2xs) var(--space-sm);
+    border-radius: var(--radius-pill);
     cursor: pointer;
-    transition: background 0.25s ease, color 0.25s ease;
+    transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
 }
 .lang-toggle:hover { background: var(--gold); color: var(--paper); }
 .lang-toggle:focus-visible, a:focus-visible, .rsvp-btn:focus-visible {
@@ -250,7 +313,9 @@ a { color: inherit; }
     outline-offset: 3px;
 }
 
-/* ============ Hero ============ */
+/* ===========================================================================
+   HERO
+   ======================================================================== */
 .hero {
     position: relative;
     min-height: 100svh;
@@ -259,20 +324,19 @@ a { color: inherit; }
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 40px 20px;
+    padding: var(--space-xl) var(--gutter);
     background:
-            linear-gradient(180deg, rgba(36,38,31,0.55), rgba(36,38,31,0.72)),
+            var(--scrim),
             url('hero-photo.jpeg') 20% 90% / cover no-repeat;
-
 }
 
 .eyebrow {
     font-family: var(--utility);
     text-transform: uppercase;
-    letter-spacing: 0.24em;
-    font-size: 0.75rem;
+    letter-spacing: var(--tracking-wider);
+    font-size: var(--text-xs);
     color: var(--wine);
-    margin-bottom: 18px;
+    margin-bottom: var(--space-md);
 }
 .eyebrow.light { color: var(--gold); }
 .hero .eyebrow { color: var(--gold); }
@@ -280,12 +344,12 @@ a { color: inherit; }
 .names {
     font-family: var(--display);
     font-weight: 500;
-    font-size: clamp(2.6rem, 9vw, 5.5rem);
+    font-size: var(--text-xl);
     margin: 0;
     color: var(--ink);
     line-height: 1.05;
 }
-.hero .names { color: var(--paper); text-shadow: 0 2px 18px rgba(0,0,0,0.35); }
+.hero .names { color: var(--paper); text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35); }
 .amp {
     font-style: italic;
     font-weight: 300;
@@ -297,23 +361,27 @@ a { color: inherit; }
 .hero-date {
     font-family: var(--utility);
     letter-spacing: 0.1em;
-    font-size: 1rem;
+    font-size: var(--text-sm);
     color: var(--paper);
-    margin-top: 18px;
+    margin-top: var(--space-md);
 }
 
 .hero-rule {
     width: 1px;
     height: 60px;
     background: var(--gold);
-    margin-top: 34px;
+    margin-top: var(--space-lg);
 }
 
-/* ============ Sections ============ */
-.section { position: relative; padding: 110px 24px; }
+/* ===========================================================================
+   SECTIONS
+   ======================================================================== */
+.section { position: relative; padding: var(--space-2xl) var(--gutter); }
 .section.paper { background: var(--paper); }
-.section.ink { background: linear-gradient(rgba(0,0,0,0.32), rgba(0,0,0,0.32)),
-url('background envelope.jpg') center / cover no-repeat; color: var(--paper); }
+.section.ink {
+    background: var(--scrim), url('background envelope.jpg') center / cover no-repeat;
+    color: var(--on-dark);
+}
 
 .section-inner {
     max-width: 720px;
@@ -326,151 +394,122 @@ url('background envelope.jpg') center / cover no-repeat; color: var(--paper); }
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(92,31,46,0.25), transparent);
+    background: linear-gradient(90deg, transparent, rgba(92, 31, 46, 0.25), transparent);
 }
 
 .body-text {
-    font-size: 1.25rem;
-    line-height: 1.75;
+    font-size: var(--text-base);
+    line-height: var(--leading-body);
     color: var(--ink);
-    font-weight: 400;
+    max-width: var(--measure);
+    margin-inline: auto;
 }
 
-/* ============ Details ============ */
+/* ===========================================================================
+   DETAILS
+   ======================================================================== */
 .details-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
-    margin-top: 44px;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
 }
 @media (max-width: 720px) {
     .details-grid { grid-template-columns: 1fr; }
 }
 .detail-card {
-    border: 1px solid rgba(246,241,231,0.18);
-    padding: 30px 20px;
+    border: var(--hairline-light);
+    padding: var(--space-lg) var(--space-md);
     border-radius: 2px;
 }
 .detail-label {
     font-family: var(--utility);
     text-transform: uppercase;
-    letter-spacing: 0.14em;
-    font-size: 0.7rem;
+    letter-spacing: var(--tracking-wide);
+    font-size: var(--text-xs);
     color: var(--gold);
-    margin: 0 0 12px;
+    margin: 0 0 var(--space-xs);
 }
 .detail-value {
     font-family: var(--display);
-    font-size: 1.4rem;
-    margin: 0 0 6px;
+    font-size: var(--text-md);
+    line-height: 1.25;
+    margin: 0 0 var(--space-2xs);
 }
 .detail-sub {
-    font-size: 1rem;
-    color: rgba(246,241,231,0.7);
+    font-size: var(--text-body-sm);
+    color: var(--on-dark-muted);
     margin: 0;
 }
 
-/* ============ Timeline ============ */
+/* ===========================================================================
+   TIMELINE
+   ======================================================================== */
 .timeline {
     list-style: none;
-    margin: 50px auto 0;
+    margin: var(--space-lg) auto 0;
     padding: 0;
     max-width: 460px;
     text-align: left;
 }
 .timeline li {
     display: flex;
-    gap: 22px;
+    gap: var(--space-md);
     align-items: baseline;
-    padding: 16px 0;
-    border-bottom: 1px solid rgba(36,38,31,0.12);
+    padding: var(--space-sm) 0;
+    border-bottom: var(--hairline);
 }
 .timeline li:last-child { border-bottom: none; }
 .time {
     font-family: var(--utility);
     letter-spacing: 0.06em;
     color: var(--wine);
-    font-size: 0.9rem;
-    width: 56px;
+    font-size: var(--text-sm);
+    width: 3.5rem;
     flex-shrink: 0;
 }
-.event { font-size: 1.15rem; }
+.event { font-size: var(--text-base); }
 
-/* ============ RSVP ============ */
+/* ===========================================================================
+   RSVP + FOOTER
+   ======================================================================== */
 .rsvp-deadline {
     font-family: var(--display);
-    font-size: 1.6rem;
-    margin: 10px 0 30px;
+    font-size: var(--text-lg);
+    margin: var(--space-2xs) 0 var(--space-lg);
 }
 .rsvp-btn {
     display: inline-block;
     font-family: var(--utility);
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     text-decoration: none;
     color: var(--ink);
     background: var(--gold);
-    padding: 16px 44px;
-    border-radius: 999px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    padding: var(--space-sm) var(--space-xl);
+    border-radius: var(--radius-pill);
+    transition: transform var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
 }
-.rsvp-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(169,131,75,0.35); }
+.rsvp-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(189, 149, 87, 0.35); }
 
 .footer {
     text-align: center;
-    padding: 40px;
+    padding: var(--space-xl) var(--gutter);
     background: #3D1620;
-    color: rgba(246,241,231,0.5);
+    color: rgba(244, 238, 226, 0.55);
     font-family: var(--utility);
-    font-size: 0.8rem;
+    font-size: var(--text-xs);
     letter-spacing: 0.08em;
 }
 
-/* ============ Scroll reveal ============ */
+/* ===========================================================================
+   SCROLL REVEAL
+   ======================================================================== */
 .reveal {
     opacity: 0;
-    transition: opacity 0.9s ease, transform 0.9s cubic-bezier(.16,.84,.44,1);
+    transition: opacity var(--dur-slow) ease, transform var(--dur-slow) var(--ease-out);
 }
 .reveal[data-reveal="fade-up"] { transform: translateY(36px); }
 .reveal[data-reveal="fade-left"] { transform: translateX(-28px); }
-.reveal.visible { opacity: 1; transform: translate(0,0); }
-
-/* ============ Phone tuning ============ */
-@media (max-width: 600px) {
-    /* Tighter vertical rhythm so sections aren't a scroll marathon */
-    .section { padding: 68px 22px; }
-    .hero { padding: 48px 22px; }
-
-    /* Body copy sized for a hand, not a monitor */
-    .body-text { font-size: 1.12rem; line-height: 1.7; }
-    .hero-date { font-size: 0.95rem; }
-
-    /* Rein in wide letter-spacing that can push past the screen edge */
-    .eyebrow { letter-spacing: 0.16em; font-size: 0.7rem; }
-
-    /* Details cards: a touch less padding when stacked full-width */
-    .details-grid { gap: 18px; margin-top: 34px; }
-    .detail-card { padding: 24px 20px; }
-    .detail-value { font-size: 1.3rem; }
-
-    /* Timeline: keep time column snug beside the event text */
-    .timeline { margin-top: 38px; }
-    .timeline li { gap: 16px; }
-    .time { width: 48px; }
-    .event { font-size: 1.08rem; }
-
-    .rsvp-deadline { font-size: 1.4rem; }
-    .rsvp-btn { padding: 15px 38px; }
-
-    /* Nudge the language toggle in from the corner + comfy tap size */
-    .lang-toggle { top: 14px; right: 14px; padding: 9px 15px; }
-
-    .footer { padding: 34px 22px; }
-}
-
-/* Very small phones (older/compact devices) */
-@media (max-width: 360px) {
-    .names { font-size: 2.3rem; }
-    .section { padding: 56px 18px; }
-}
+.reveal.visible { opacity: 1; transform: translate(0, 0); }
