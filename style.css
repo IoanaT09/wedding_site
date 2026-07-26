@@ -203,7 +203,10 @@ a { color: inherit; }
 .env-back {
     position: absolute;
     inset: 0;
-    background: linear-gradient(150deg, var(--paper-dark), #E2D8C2);
+    /* Darker towards the top: this is now visible through the open notch,
+       so it has to read as the shaded inside of the envelope rather than
+       another sheet of paper. */
+    background: linear-gradient(180deg, #B8AA8E 0%, #D8CDB4 18%, var(--paper-dark) 45%, #E2D8C2 100%);
     border-radius: 4px;
     box-shadow: var(--shadow-deep);
     /* The depth ladder, back to front: back 0, letter 2, front 6, flap 7,
@@ -246,13 +249,16 @@ a { color: inherit; }
             linear-gradient(155deg, var(--paper) 0%, var(--paper-dark) 60%, #E4DAC5 100%);
     border-radius: 4px;
     transform: translateZ(6px);
-    /* Only the lower seams are drawn. The upper two used to be there as well,
-       and while the flap covers them exactly when closed, opening the flap
-       took its edges away and left a painted V sitting in front of the
-       letter — which read as the inside of the envelope being on top of it.
-       The upward shadow is the envelope's lip falling across the letter
-       behind it: without it the two meet at a hard line and look cut. */
-    box-shadow: 0 -9px 18px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    /* The V is cut out, so once the flap opens you see down into the
+       envelope. The notch is inset 3% at the top and stops 3% short of the
+       flap's apex, so the closed flap overhangs it on every edge. That
+       margin is the whole trick: an earlier version had the two shapes
+       share identical diagonals, and coincident edges antialias against
+       each other and leak the letter through as hairlines.
+       Only the lower fold seams are drawn — the upper two are the flap's
+       own edges, and painting them here left a V in front of the letter
+       after the flap had gone. */
+    clip-path: polygon(0 0, 3% 0, 50% 49%, 97% 0, 100% 0, 100% 100%, 0 100%);
 }
 
 /* Letter type scales with the envelope (cq units), not the viewport. */
