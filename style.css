@@ -216,6 +216,18 @@ a { color: inherit; }
 /* ============ Site shell ============ */
 #site { background: var(--paper); }
 
+.noscript-note {
+    margin: 0;
+    padding: 22vh 24px;
+    min-height: 100svh;
+    background: var(--paper);
+    color: var(--ink);
+    text-align: center;
+    font-family: var(--utility);
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+}
+
 .lang-toggle {
     position: fixed;
     top: 20px;

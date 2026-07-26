@@ -36,25 +36,44 @@ document.body.style.overflow = 'hidden';
 // If anything below throws, the page must not be left locked behind a dead envelope.
 window.addEventListener('error', showSite);
 
-// ============ Language toggle (EN / RO) ============
-// There are two toggles — one on the envelope landing screen, one in the site.
+// ============ Language (RO / EN) ============
+// Every string comes from CONTENT in content.js, keyed by the data-i18n
+// attributes in the markup. Nothing is duplicated in the DOM.
+const DEFAULT_LANG = 'ro';
 const langToggles = document.querySelectorAll('.lang-toggle');
-let currentLang = 'en';
+let currentLang = DEFAULT_LANG;
 
 function setLang(lang) {
+    const dict = CONTENT[lang];
+    if (!dict) return;
+
     currentLang = lang;
-    document.querySelectorAll('.lang-en').forEach(el => { el.hidden = lang !== 'en'; });
-    document.querySelectorAll('.lang-ro').forEach(el => { el.hidden = lang !== 'ro'; });
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const text = dict[el.dataset.i18n];
+        if (text !== undefined) el.textContent = text;
+    });
+
+    document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+        const text = dict[el.dataset.i18nAriaLabel];
+        if (text !== undefined) el.setAttribute('aria-label', text);
+    });
+
+    // The toggle shows the language you'd switch *to*.
     langToggles.forEach(btn => { btn.textContent = lang === 'en' ? 'RO' : 'EN'; });
+
     document.documentElement.lang = lang;
+    try { localStorage.setItem('lang', lang); } catch (e) { /* private mode */ }
 }
 
 langToggles.forEach(btn => {
     btn.addEventListener('click', () => setLang(currentLang === 'en' ? 'ro' : 'en'));
 });
 
-// Default to Romanian on first load (guests can switch to English via the toggle)
-setLang('ro');
+// Remember the guest's choice; otherwise Romanian.
+let savedLang;
+try { savedLang = localStorage.getItem('lang'); } catch (e) { /* private mode */ }
+setLang(CONTENT[savedLang] ? savedLang : DEFAULT_LANG);
 
 // ============ Scroll reveal ============
 // Note: .reveal is never placed on a language-swapped element — a hidden element
