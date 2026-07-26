@@ -3,11 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ioana &amp; Rares</title>
+    <title>Ioana &amp; Rareș · 3.10.2026</title>
+    <meta name="description" content="Ioana și Rareș se căsătoresc pe 3 octombrie 2026 la Viena. · Ioana and Rareș are getting married on 3 October 2026 in Vienna.">
+    <meta name="theme-color" content="#3A1420">
+    <link rel="icon" href="seal.svg">
+
+    <!-- Link preview for WhatsApp, iMessage and the rest. REPLACE YOUR_SITE_URL
+         with the real address once it's hosted — scrapers need absolute URLs. -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Ioana &amp; Rareș · 3.10.2026">
+    <meta property="og:description" content="Ne căsătorim la Viena și ne-ar bucura să fiți alături de noi. · We're getting married in Vienna and would love you there.">
+    <meta property="og:image" content="YOUR_SITE_URL/img/hero-photo.jpg">
+    <meta property="og:url" content="YOUR_SITE_URL/">
+    <meta name="twitter:card" content="summary_large_image">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=10">
+    <link rel="stylesheet" href="style.css?v=11">
 
     <!-- Text is injected from content.js, so with JS off there is nothing to
          show. Hide the envelope and explain, rather than sit on a dead page. -->
@@ -98,6 +111,30 @@
         </div>
     </section>
 
+    <!-- COUNTDOWN -->
+    <section class="section paper countdown-section" id="countdown">
+        <div class="crease" aria-hidden="true"></div>
+        <div class="section-inner reveal" data-reveal="fade-up">
+            <p class="eyebrow" data-i18n="countdown.eyebrow"></p>
+            <!-- Filled in by script.js; the dashes are what shows if it can't be. -->
+            <div class="countdown" id="countdown-units">
+                <div class="cd-unit">
+                    <span class="cd-num" data-cd="days">–</span>
+                    <span class="cd-label" data-i18n="countdown.days"></span>
+                </div>
+                <div class="cd-unit">
+                    <span class="cd-num" data-cd="hours">–</span>
+                    <span class="cd-label" data-i18n="countdown.hours"></span>
+                </div>
+                <div class="cd-unit">
+                    <span class="cd-num" data-cd="minutes">–</span>
+                    <span class="cd-label" data-i18n="countdown.minutes"></span>
+                </div>
+            </div>
+            <p class="countdown-past" data-i18n="countdown.past" hidden></p>
+        </div>
+    </section>
+
     <!-- DETAILS -->
     <section class="section ink" id="details">
         <div class="section-inner">
@@ -111,11 +148,16 @@
                     <p class="detail-label" data-i18n="details.ceremony.label"></p>
                     <p class="detail-value" data-i18n="details.ceremony.value"></p>
                     <p class="detail-sub" data-i18n="details.ceremony.sub"></p>
+                    <!-- Swap the query for the real address, keeping the + signs -->
+                    <a class="detail-link" data-i18n="details.map" target="_blank" rel="noopener"
+                       href="https://www.google.com/maps/search/?api=1&amp;query=REPLACE+WITH+CEREMONY+ADDRESS+Vienna"></a>
                 </div>
                 <div class="detail-card reveal" data-reveal="fade-up" style="--i:1">
                     <p class="detail-label" data-i18n="details.reception.label"></p>
                     <p class="detail-value" data-i18n="details.reception.value"></p>
                     <p class="detail-sub" data-i18n="details.reception.sub"></p>
+                    <a class="detail-link" data-i18n="details.map" target="_blank" rel="noopener"
+                       href="https://www.google.com/maps/search/?api=1&amp;query=REPLACE+WITH+RECEPTION+ADDRESS+Vienna"></a>
                 </div>
                 <div class="detail-card reveal" data-reveal="fade-up" style="--i:2">
                     <p class="detail-label" data-i18n="details.dress.label"></p>
@@ -123,6 +165,27 @@
                     <p class="detail-sub" data-i18n="details.dress.sub"></p>
                 </div>
             </div>
+
+            <div class="calendar reveal" data-reveal="fade-up">
+                <p class="calendar-label" data-i18n="details.calendar"></p>
+                <p class="calendar-links">
+                    <a target="_blank" rel="noopener" data-i18n="details.calendar.google"
+                       href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Ioana%20%26%20Rare%C8%99%20%E2%80%94%20Wedding&amp;dates=20261003T130000Z/20261003T230000Z&amp;location=Vienna&amp;details=https://YOUR_SITE_URL/"></a>
+                    <span class="calendar-sep" aria-hidden="true">·</span>
+                    <a href="wedding.ics" download data-i18n="details.calendar.ics"></a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY — images come from the GALLERY array in content.js -->
+    <section class="section paper" id="gallery">
+        <div class="crease" aria-hidden="true"></div>
+        <div class="section-inner wide">
+            <div class="reveal" data-reveal="fade-up">
+                <p class="eyebrow" data-i18n="gallery.eyebrow"></p>
+            </div>
+            <div class="gallery" id="gallery-grid"></div>
         </div>
     </section>
 
@@ -159,7 +222,7 @@
 
 </div>
 
-<script src="content.js?v=10"></script>
-<script src="script.js?v=10"></script>
+<script src="content.js?v=11"></script>
+<script src="script.js?v=11"></script>
 </body>
 </html>

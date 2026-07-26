@@ -539,9 +539,29 @@ a { color: inherit; }
     padding: var(--space-xl) var(--gutter);
     /* Graded rather than flat: the photo stays open at the top and darkens
        towards the bottom, where the type sits. */
-    background:
-            linear-gradient(180deg, rgba(20, 21, 17, 0.3) 0%, rgba(20, 21, 17, 0.5) 45%, rgba(20, 21, 17, 0.78) 100%),
-            url('hero-photo.jpeg') var(--hero-focus) / cover no-repeat;
+    --hero-grade: linear-gradient(180deg, rgba(20, 21, 17, 0.3) 0%, rgba(20, 21, 17, 0.5) 45%, rgba(20, 21, 17, 0.78) 100%);
+    --hero-img: url('img/hero-photo.jpg');
+    background: var(--hero-grade), var(--hero-img) var(--hero-focus) / cover no-repeat;
+}
+
+/* Phones get a 900px rendition — a third of the bytes, and no visible
+   difference at that size. */
+@media (max-width: 640px) {
+    .hero { --hero-img: url('img/hero-photo@900.jpg'); }
+}
+
+/* WebP where it's understood, JPEG everywhere else. */
+@supports (background-image: image-set(url('img/hero-photo.webp') type('image/webp'))) {
+    .hero {
+        --hero-img: image-set(url('img/hero-photo.webp') type('image/webp'),
+                              url('img/hero-photo.jpg') type('image/jpeg'));
+    }
+    @media (max-width: 640px) {
+        .hero {
+            --hero-img: image-set(url('img/hero-photo@900.webp') type('image/webp'),
+                                  url('img/hero-photo@900.jpg') type('image/jpeg'));
+        }
+    }
 }
 
 .eyebrow {
@@ -604,6 +624,7 @@ a { color: inherit; }
     text-align: center;
 }
 .section-inner.center { display: flex; flex-direction: column; align-items: center; }
+.section-inner.wide { max-width: 980px; }
 
 /* Divider between paper sections: a hairline that fades out at both ends,
    with a small gold lozenge set into the middle of it. */
@@ -669,9 +690,101 @@ a { color: inherit; }
     .detail-card + .detail-card::before { margin-top: var(--space-2xs); }
 }
 
-/* Each card arrives just after the one before it. */
+/* Each item arrives just after the one before it. */
 .details-grid .reveal,
+.gallery .reveal,
 .timeline .reveal { transition-delay: calc(var(--i, 0) * 0.09s); }
+
+.detail-link {
+    display: inline-block;
+    margin-top: var(--space-xs);
+    font-family: var(--utility);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    font-size: var(--text-xs);
+    color: var(--gold);
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 1px solid rgba(189, 149, 87, 0.45);
+}
+.detail-link:hover { color: var(--on-dark); border-bottom-color: var(--on-dark); }
+
+/* ============ Add to calendar ============ */
+.calendar { margin-top: var(--space-xl); }
+.calendar-label {
+    font-family: var(--utility);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    font-size: var(--text-xs);
+    color: var(--on-dark-muted);
+    margin: 0 0 var(--space-2xs);
+}
+.calendar-links { margin: 0; font-family: var(--utility); font-size: var(--text-sm); }
+.calendar-links a {
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(189, 149, 87, 0.45);
+}
+.calendar-links a:hover { color: var(--on-dark); border-bottom-color: var(--on-dark); }
+.calendar-sep { color: var(--on-dark-muted); margin: 0 var(--space-2xs); }
+
+/* ============ Countdown ============ */
+.countdown-section { padding-block: var(--space-xl); }
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-lg);
+    margin-top: var(--space-md);
+}
+.cd-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 4.25rem;
+}
+.cd-num {
+    font-family: var(--display);
+    font-size: var(--text-lg);
+    line-height: 1;
+    color: var(--wine);
+    /* Equal-width digits, so the row doesn't twitch as the numbers tick. */
+    font-variant-numeric: tabular-nums;
+}
+.cd-label {
+    font-family: var(--utility);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    font-size: var(--text-xs);
+    color: var(--ink);
+    opacity: 0.6;
+}
+.countdown-past { font-size: var(--text-base); margin: var(--space-sm) 0 0; }
+
+/* ============ Gallery ============ */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+    margin-top: var(--space-xl);
+}
+@media (min-width: 720px) {
+    .gallery { grid-template-columns: repeat(3, 1fr); }
+}
+.gallery-item {
+    margin: 0;
+    overflow: hidden;
+    border-radius: 2px;
+    background: var(--paper-dark);
+}
+.gallery-item img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease-out);
+}
+.gallery-item:hover img { transform: scale(1.04); }
 
 .detail-label {
     font-family: var(--utility);

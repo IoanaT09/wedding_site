@@ -89,6 +89,11 @@ function setLang(lang) {
         if (text !== undefined) el.setAttribute('aria-label', text);
     });
 
+    document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+        const text = dict[el.dataset.i18nAlt];
+        if (text !== undefined) el.setAttribute('alt', text);
+    });
+
     // The toggle shows the language you'd switch *to*.
     langToggles.forEach(btn => { btn.textContent = lang === 'en' ? 'RO' : 'EN'; });
 
@@ -104,6 +109,68 @@ langToggles.forEach(btn => {
 let savedLang;
 try { savedLang = localStorage.getItem('lang'); } catch (e) { /* private mode */ }
 setLang(CONTENT[savedLang] ? savedLang : DEFAULT_LANG);
+
+// ============ Gallery ============
+// Built from the GALLERY array so adding or reordering photographs is a
+// one-line change in content.js. Runs before the reveal observer below so
+// the new tiles get picked up with everything else.
+const galleryGrid = document.getElementById('gallery-grid');
+
+function buildGallery() {
+    if (!galleryGrid || typeof GALLERY === 'undefined') return;
+    galleryGrid.innerHTML = '';
+    GALLERY.forEach((src, i) => {
+        const figure = document.createElement('figure');
+        figure.className = 'gallery-item reveal';
+        figure.dataset.reveal = 'fade-up';
+        figure.style.setProperty('--i', i % 3);
+
+        const img = document.createElement('img');
+        img.src = src;
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.alt = '';                       // set per language in setLang
+        img.dataset.i18nAlt = 'gallery.alt';
+
+        figure.appendChild(img);
+        galleryGrid.appendChild(figure);
+    });
+}
+
+buildGallery();
+setLang(currentLang);   // fills in the alt text on the tiles just created
+
+// ============ Countdown ============
+const countdownUnits = document.getElementById('countdown-units');
+const countdownPast = document.querySelector('.countdown-past');
+
+function updateCountdown() {
+    if (!countdownUnits) return;
+    const remaining = new Date(WEDDING) - Date.now();
+
+    if (remaining <= 0) {
+        countdownUnits.hidden = true;
+        if (countdownPast) countdownPast.hidden = false;
+        return true;                        // nothing left to count
+    }
+
+    const minutes = Math.floor(remaining / 60000);
+    const parts = {
+        days: Math.floor(minutes / 1440),
+        hours: Math.floor(minutes / 60) % 24,
+        minutes: minutes % 60
+    };
+    countdownUnits.querySelectorAll('[data-cd]').forEach(el => {
+        el.textContent = parts[el.dataset.cd];
+    });
+    return false;
+}
+
+if (!updateCountdown()) {
+    // Minutes are the smallest unit shown, so there is nothing to gain from
+    // ticking more often than twice a minute.
+    setInterval(updateCountdown, 30000);
+}
 
 // ============ Scroll reveal ============
 // Note: .reveal is never placed on a language-swapped element — a hidden element

@@ -8,8 +8,27 @@
 //    - ceremony + reception venue names
 //    - the dress code
 //    - the welcome paragraph ("[X] years together")
-//  The RSVP link is an href in index.html, not a text string.
+//  Elsewhere:
+//    - the RSVP link (href in index.html, currently YOUR_GOOGLE_FORM_LINK)
+//    - the map links (hrefs in index.html, currently REPLACE+WITH+ADDRESS)
+//    - the venue names and times in wedding.ics
+//    - YOUR_SITE_URL in the share-preview tags in index.html
 // ============================================================================
+
+// When it all happens. Drives the countdown; the calendar file has its own
+// copy of these times in UTC.
+const WEDDING = '2026-10-03T15:00:00+02:00';
+
+// The gallery, in order. Swap these filenames for the real photographs —
+// anything the browser can display works, and the grid crops them to 4:5.
+const GALLERY = [
+    'img/photo-1.svg',
+    'img/photo-2.svg',
+    'img/photo-3.svg',
+    'img/photo-4.svg',
+    'img/photo-5.svg',
+    'img/photo-6.svg'
+];
 
 const CONTENT = {
     ro: {
@@ -35,6 +54,19 @@ const CONTENT = {
         'details.dress.label': 'Ținută',
         'details.dress.value': '[Elegantă / de grădină / etc.]',
         'details.dress.sub': 'Recomandăm pantofi comozi',
+        'details.map': 'Vezi harta',
+        'details.calendar': 'Adaugă în calendar',
+        'details.calendar.google': 'Google Calendar',
+        'details.calendar.ics': 'Descarcă .ics',
+
+        'countdown.eyebrow': 'Până în ziua cea mare',
+        'countdown.days': 'zile',
+        'countdown.hours': 'ore',
+        'countdown.minutes': 'minute',
+        'countdown.past': 'Vă mulțumim că ați sărbătorit alături de noi.',
+
+        'gallery.eyebrow': 'Noi doi',
+        'gallery.alt': 'Ioana și Rareș',
 
         'timeline.eyebrow': 'Cum se desfășoară ziua',
         'timeline.arrival': 'Sosirea invitaților',
@@ -71,6 +103,19 @@ const CONTENT = {
         'details.dress.label': 'Dress code',
         'details.dress.value': '[Formal / Garden / etc.]',
         'details.dress.sub': 'Comfortable shoes recommended',
+        'details.map': 'View map',
+        'details.calendar': 'Add to calendar',
+        'details.calendar.google': 'Google Calendar',
+        'details.calendar.ics': 'Download .ics',
+
+        'countdown.eyebrow': 'Until the day',
+        'countdown.days': 'days',
+        'countdown.hours': 'hours',
+        'countdown.minutes': 'minutes',
+        'countdown.past': 'Thank you for celebrating with us.',
+
+        'gallery.eyebrow': 'The two of us',
+        'gallery.alt': 'Ioana and Rareș',
 
         'timeline.eyebrow': 'How the day unfolds',
         'timeline.arrival': 'Guests arrive',
