@@ -125,7 +125,7 @@ a { color: inherit; }
     --t-seal:   0.12s;   /* wax cracks */
     --t-flap:   0.15s;   /* flap swings open */
     --t-letter: 0.55s;   /* letter rises out */
-    --t-exit:   2.25s;   /* the whole intro leaves, hero rises to meet it */
+    --t-exit:   1.85s;   /* the whole intro leaves, hero rises to meet it */
 }
 
 #envelope-screen {
