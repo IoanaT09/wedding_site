@@ -13,11 +13,20 @@
     --wine-light: #7A2C3F;
     --gold: #BD9557;          /* lightened from #A9834B so small gold text on dark stays legible */
     --sage: #6B7457;
+    --wine-deep: #3A1420;
     --on-dark: #F4EEE2;
     --on-dark-muted: rgba(244, 238, 226, 0.82);
 
     /* Scrim laid over photographs so text on top of them stays readable. */
     --scrim: linear-gradient(rgba(20, 21, 17, 0.58), rgba(20, 21, 17, 0.66));
+
+    /* Engraved diamond lattice — the dark counterpart to the paper sections.
+       One 44px tile, drawn inline, so it stays crisp at any zoom and costs
+       nothing to download. Edge dots are halved on purpose: neighbouring
+       tiles complete them. */
+    --lattice: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cpath d='M22 0 44 22 22 44 0 22Z' fill='none' stroke='%23BD9557' stroke-opacity='.2' stroke-width='.8'/%3E%3Cg fill='%23BD9557' fill-opacity='.28'%3E%3Ccircle cx='22' cy='0' r='1.1'/%3E%3Ccircle cx='22' cy='44' r='1.1'/%3E%3Ccircle cx='0' cy='22' r='1.1'/%3E%3Ccircle cx='44' cy='22' r='1.1'/%3E%3C/g%3E%3C/svg%3E");
+    /* Vignette that sits over the lattice so the centre stays the focus. */
+    --vignette: radial-gradient(ellipse at 50% 45%, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.38) 100%);
 
     /* ---- Type ---- */
     --display: 'Fraunces', Georgia, serif;
@@ -60,7 +69,6 @@
     --ease-out: cubic-bezier(.16, .84, .44, 1);
     --ease-flap: cubic-bezier(.6, 0, .4, 1);
     --dur-fast: 0.25s;
-    --dur-med: 0.6s;
     --dur-slow: 0.9s;
 }
 
@@ -135,10 +143,8 @@ a { color: inherit; }
 .env-scrim {
     position: absolute;
     inset: 0;
-    background:
-            var(--scrim),
-            url('background envelope.jpg') center / cover no-repeat;
-    background-color: var(--ink);
+    background: var(--vignette), var(--lattice) repeat;
+    background-color: var(--wine-deep);
 }
 
 .env-stage {
@@ -316,34 +322,47 @@ a { color: inherit; }
     transform: translate(-50%, -50%) translateZ(9px);
     transition: transform var(--dur-fast) ease;
 }
+/* Both halves paint the identical full seal and are then clipped, so the wax
+   lines up exactly until it breaks. Crucially neither carries a shadow of
+   its own — that was what made the seam visible before. All shading is
+   baked into seal.svg, and the drop shadow lives on ::after below. */
 .seal-half {
     position: absolute;
     inset: 0;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, var(--wine-light), var(--wine) 72%);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4), inset 0 0 8px rgba(0, 0, 0, 0.3);
+    background: url('seal.svg') center / 100% 100% no-repeat;
 }
-/* Both halves carry the identical full circle and are clipped, so the wax
-   grain lines up perfectly until the moment it breaks. */
-.seal-left  { clip-path: inset(0 50% 0 0); }
-.seal-right { clip-path: inset(0 0 0 50%); }
+/* Split slightly off-vertical: wax doesn't break along a plumb line. */
+.seal-left  { clip-path: polygon(0 0, 52% 0, 48% 100%, 0 100%); }
+.seal-right { clip-path: polygon(52% 0, 100% 0, 100% 100%, 48% 100%); }
+
+/* Drop shadow, on an unclipped layer so it can't produce a seam. */
+.env-seal::after {
+    content: '';
+    position: absolute;
+    inset: 4%;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45);
+}
 
 .seal-mark {
     position: relative;
     font-family: var(--display);
-    color: var(--paper);
+    color: #F0DCD2;
     font-size: 4cqw;
     letter-spacing: 0.03em;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5), 0 -1px 0 rgba(255, 255, 255, 0.12);
 }
-/* The crack itself — invisible until the seal breaks. */
+/* The crack itself — invisible until the seal breaks, and angled to match
+   the split above. */
 .env-seal::before {
     content: '';
     position: absolute;
-    top: 6%;
-    bottom: 6%;
+    top: 7%;
+    bottom: 7%;
     left: 50%;
     width: 1px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.55);
+    transform: rotate(2.3deg);
     opacity: 0;
 }
 .env-seal:hover { transform: translate(-50%, -50%) translateZ(9px) scale(1.06); }
@@ -364,11 +383,16 @@ a { color: inherit; }
 #envelope-screen.is-opening .seal-mark {
     animation: fade-out 0.18s ease var(--t-seal) forwards;
 }
+/* The two halves are deliberately not mirror images of each other, and the
+   right one lags slightly — symmetry would read as a wipe, not a break. */
 #envelope-screen.is-opening .seal-left {
-    animation: seal-part-left 0.55s var(--ease-out) var(--t-seal) forwards;
+    animation: seal-part-left 0.6s cubic-bezier(.36, .04, .5, 1) var(--t-seal) forwards;
 }
 #envelope-screen.is-opening .seal-right {
-    animation: seal-part-right 0.55s var(--ease-out) var(--t-seal) forwards;
+    animation: seal-part-right 0.6s cubic-bezier(.36, .04, .5, 1) calc(var(--t-seal) + 0.05s) forwards;
+}
+#envelope-screen.is-opening .env-seal::after {
+    animation: fade-out 0.25s ease var(--t-seal) forwards;
 }
 
 /* will-change is set only for the sequence; the whole screen is removed
@@ -410,10 +434,14 @@ a { color: inherit; }
     100% { opacity: 0; }
 }
 @keyframes seal-part-left {
-    to { transform: translate(-16%, 26%) rotate(-15deg); opacity: 0; }
+    0%   { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    25%  { transform: translate(-7%, -2%) rotate(-6deg); opacity: 1; }
+    100% { transform: translate(-24%, 34%) rotate(-21deg); opacity: 0; }
 }
 @keyframes seal-part-right {
-    to { transform: translate(16%, 26%) rotate(15deg); opacity: 0; }
+    0%   { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    25%  { transform: translate(6%, -1%) rotate(4deg); opacity: 1; }
+    100% { transform: translate(21%, 38%) rotate(17deg); opacity: 0; }
 }
 
 /* The flap travels backwards in Z as it opens, so the rising letter passes
@@ -562,7 +590,8 @@ a { color: inherit; }
 .section { position: relative; padding: var(--space-2xl) var(--gutter); }
 .section.paper { background: var(--paper); }
 .section.ink {
-    background: var(--scrim), url('background envelope.jpg') center / cover no-repeat;
+    background: var(--vignette), var(--lattice) repeat;
+    background-color: var(--wine-deep);
     color: var(--on-dark);
 }
 
@@ -679,7 +708,7 @@ a { color: inherit; }
 .footer {
     text-align: center;
     padding: var(--space-xl) var(--gutter);
-    background: #3D1620;
+    background: var(--wine-deep);
     color: rgba(244, 238, 226, 0.55);
     font-family: var(--utility);
     font-size: var(--text-xs);
