@@ -127,8 +127,10 @@ function buildGallery() {
 
         const img = document.createElement('img');
         img.src = src;
-        img.loading = 'lazy';
-        img.decoding = 'async';
+        // setAttribute rather than the property: the attribute is what the
+        // browser's preload scanner reads, and it can't be missed.
+        img.setAttribute('loading', 'lazy');
+        img.setAttribute('decoding', 'async');
         img.alt = '';                       // set per language in setLang
         img.dataset.i18nAlt = 'gallery.alt';
 

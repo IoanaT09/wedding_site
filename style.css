@@ -757,7 +757,9 @@ a { color: inherit; }
     letter-spacing: var(--tracking-wide);
     font-size: var(--text-xs);
     color: var(--ink);
-    opacity: 0.6;
+    /* 0.6 measured 4.09:1 against the paper — below AA for text this size.
+       0.7 clears it at 5.5:1 and is visually indistinguishable. */
+    opacity: 0.7;
 }
 .countdown-past { font-size: var(--text-base); margin: var(--space-sm) 0 0; }
 
