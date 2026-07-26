@@ -58,7 +58,6 @@
     --radius-sm: 3px;
     --radius-pill: 999px;
     --hairline-light: 1px solid rgba(244, 238, 226, 0.22);
-    --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.35);
     --shadow-deep: 0 20px 60px rgba(0, 0, 0, 0.5);
 
     /* ---- Motion ---- */
@@ -103,14 +102,24 @@ body::after {
 a { color: inherit; }
 
 /* ===========================================================================
-   ENVELOPE INTRO — a real 3D scene
+   ENVELOPE INTRO
 
-   Depth is expressed with translateZ, not z-index, so occlusion is handled
-   by the browser: the letter sits at Z=2 and is genuinely hidden behind the
-   pocket at Z=6 until it clears the top edge.
+   Deliberately 2D. An earlier version built this as a preserve-3d scene with
+   translateZ depth, which looks the same but puts every element on its own
+   composited layer, each antialiased independently and then sorted by the
+   GPU. Wherever two of those layers' edges fell on the same line, subpixel
+   seams appeared — and differently per browser, GPU and pixel ratio.
 
-   The whole sequence is choreographed by the delays below. Retiming the
-   animation means editing these six values and nothing else.
+   Here everything paints into one layer in document order and stacks with
+   z-index, so overlapping opaque shapes simply cover each other:
+
+       0 shadow   1 back   2 letter   3 front panel   4 flap   5 seal
+
+   Only transform and opacity are animated. Both have been smoothly
+   composited in every browser for a decade.
+
+   The sequence is choreographed by the four delays below; retiming it means
+   editing these and the two setTimeout values in script.js.
    ======================================================================== */
 :root {
     --t-seal:   0.12s;   /* wax cracks */
@@ -129,9 +138,6 @@ a { color: inherit; }
     gap: var(--space-lg);
     padding: var(--space-md) var(--gutter);
     z-index: 100;
-    /* No overflow / opacity / filter here: this is an ancestor of the 3D
-       scene and any of those would flatten it. The exit fade is applied to
-       .env-scrim (a sibling of the stage) for exactly this reason. */
 }
 
 .env-scrim {
@@ -150,37 +156,32 @@ a { color: inherit; }
        height, and its own height is 90% of the envelope's, so it clears the
        top edge by 0.85 x 0.90 = 0.765 of --env-h. Rounded up for margin. */
     padding-top: calc(var(--env-h) * 0.8);
-    perspective: 1100px;
-    perspective-origin: 50% 45%;
 }
 
 @media (min-width: 700px) {
     .env-stage { --env-w: min(52vw, 48svh, 600px); }
 }
 
+/* container-type drives the cq units the letter and seal are sized in, so
+   their type scales with the envelope rather than the viewport. */
 .envelope {
     position: relative;
     width: 100%;
     height: var(--env-h);
     container-type: inline-size;
-    transform-style: preserve-3d;
-    /* Pointer tilt, fed by script.js. Absent (mobile), both default to 0. */
-    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
-    transition: transform 0.35s var(--ease-out);
 }
 
-/* The idle float lives on its own layer so it never fights with the tilt
-   above it or the exit animations below it. */
+/* The idle float sits on its own element so it never competes with the
+   animations of the parts inside it. */
 .env-body {
     position: absolute;
     inset: 0;
-    transform-style: preserve-3d;
     animation: env-float 7s ease-in-out infinite;
 }
 
 @keyframes env-float {
-    0%, 100% { transform: translateY(0) rotateY(-2.5deg); }
-    50%      { transform: translateY(-1.5%) rotateY(2.5deg); }
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-1.2%); }
 }
 
 /* An infinite animation forced to 0.001ms would repaint constantly. */
@@ -188,8 +189,8 @@ a { color: inherit; }
     .env-body { animation: none !important; }
 }
 
-/* Contact shadow. A soft gradient rather than filter: blur(), because a
-   filter would flatten this element out of the 3D context. */
+/* Contact shadow. A gradient rather than filter: blur(), which would promote
+   this to its own layer for no benefit. */
 .env-shadow {
     position: absolute;
     left: 4%;
@@ -197,21 +198,19 @@ a { color: inherit; }
     bottom: -7%;
     height: 16%;
     background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0) 70%);
-    transform: translateZ(-1px);
+    z-index: 0;
 }
 
 .env-back {
     position: absolute;
     inset: 0;
-    /* Darker towards the top: this is now visible through the open notch,
-       so it has to read as the shaded inside of the envelope rather than
-       another sheet of paper. */
-    background: linear-gradient(180deg, #B8AA8E 0%, #D8CDB4 18%, var(--paper-dark) 45%, #E2D8C2 100%);
+    /* Slightly shaded at the top: this shows through the open notch, so it
+       needs to read as the inside of the envelope — but only just, or the
+       notch looks like a dark stripe across the top. */
+    background: linear-gradient(180deg, #D9CFB8 0%, #E4DAC3 22%, var(--paper-dark) 55%, #E2D8C2 100%);
     border-radius: 4px;
     box-shadow: var(--shadow-deep);
-    /* The depth ladder, back to front: back 0, letter 2, front 6, flap 7,
-       seal 9. The letter must stay between 0 and 6 for its whole travel. */
-    transform: translateZ(0px);
+    z-index: 1;
 }
 
 .env-letter {
@@ -226,6 +225,7 @@ a { color: inherit; }
        dark wine lining, where a soft 35% shadow is invisible — and without a
        shadow the eye reads the overlap as clipping rather than depth. */
     box-shadow: 0 16px 34px rgba(0, 0, 0, 0.55), 0 3px 8px rgba(0, 0, 0, 0.4);
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -233,14 +233,8 @@ a { color: inherit; }
     gap: var(--space-2xs);
     padding: var(--space-md);
     text-align: center;
-    transform: translateZ(2px);
 }
 
-/* Solid front panel. It deliberately has NO notch cut for the flap: a notch
-   and the closed flap covering it share identical diagonal edges, and
-   coincident edges antialias against each other, letting the letter behind
-   show through as hairlines. The V is drawn as fold seams instead, so it
-   still reads as an envelope with nothing to leak through. */
 .env-pocket {
     position: absolute;
     inset: 0;
@@ -248,16 +242,14 @@ a { color: inherit; }
             url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 340 230' preserveAspectRatio='none'%3E%3Cpath d='M0 230 170 118 340 230' fill='none' stroke='%23000' stroke-opacity='.08' stroke-width='1'/%3E%3C/svg%3E") center / 100% 100% no-repeat,
             linear-gradient(155deg, var(--paper) 0%, var(--paper-dark) 60%, #E4DAC5 100%);
     border-radius: 4px;
-    transform: translateZ(6px);
-    /* The V is cut out, so once the flap opens you see down into the
+    z-index: 3;
+    /* The V is cut out, so once the flap lifts you see down into the
        envelope. The notch is inset 3% at the top and stops 3% short of the
-       flap's apex, so the closed flap overhangs it on every edge. That
-       margin is the whole trick: an earlier version had the two shapes
-       share identical diagonals, and coincident edges antialias against
-       each other and leak the letter through as hairlines.
-       Only the lower fold seams are drawn — the upper two are the flap's
-       own edges, and painting them here left a V in front of the letter
-       after the flap had gone. */
+       flap's apex, so the closed flap overhangs it on every edge — the two
+       shapes never share an edge.
+       Only the lower fold seams are drawn. The upper two are the flap's own
+       edges; painting them here as well left a V sitting in front of the
+       letter once the flap had gone. */
     clip-path: polygon(0 0, 3% 0, 50% 49%, 97% 0, 100% 0, 100% 100%, 0 100%);
 }
 
@@ -284,36 +276,32 @@ a { color: inherit; }
     margin: 0;
 }
 
-/* Two-sided flap: the old single plane simply vanished past 90° because it
-   was showing its own hidden backface. */
+/* Two-sided flap: paper outside, wine lining inside. */
 .env-flap {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 52%;
+    /* Opens by flipping scaleY from 1 to -1 about its top edge. Seen head-on
+       — which is how everyone sees it — that is indistinguishable from a 3D
+       rotation, and it is a plain 2D transform every browser handles. */
     transform-origin: top center;
-    transform-style: preserve-3d;
-    transform: translateZ(7px) rotateX(0deg);
+    z-index: 4;
 }
 .flap-face {
     position: absolute;
-    inset: -1px 0 0 0;   /* 1px overlap — avoids a hairline seam on iOS */
+    inset: -1px 0 0 0;   /* 1px bleed at the hinge, so no gap can open there */
     clip-path: polygon(0 0, 100% 0, 50% 100%);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
 }
 .flap-outer {
     background: linear-gradient(165deg, #FBF7EE, var(--paper) 50%, var(--paper-dark));
 }
-/* The lining. Flipped on Y, not X: the triangle is symmetric left-to-right,
-   so this reverses which way the face points without moving its silhouette.
-   Flipping on X would invert the triangle and leave the open flap pointing
-   the wrong way. */
+/* The lining. With no 3D there are no backfaces, so the two faces simply
+   swap over as the flip passes through zero — see face-out / face-in. */
 .flap-inner {
-    transform: rotateY(180deg);
-    /* Darker towards the fold, so the standing flap reads as a surface
-       angled away from the light rather than a flat wine triangle. */
+    opacity: 0;
+    /* Darkest at the hinge, which stays at the top through the flip. */
     background: linear-gradient(180deg, #3A1119 0%, var(--wine) 55%, var(--wine-light) 100%);
 }
 
@@ -336,7 +324,8 @@ a { color: inherit; }
     display: grid;
     place-items: center;
     cursor: pointer;
-    transform: translate(-50%, -50%) translateZ(9px);
+    transform: translate(-50%, -50%);
+    z-index: 5;
     transition: transform var(--dur-fast) ease;
 }
 /* Both halves paint the identical full seal and are then clipped, so the wax
@@ -382,7 +371,7 @@ a { color: inherit; }
     transform: rotate(2.3deg);
     opacity: 0;
 }
-.env-seal:hover { transform: translate(-50%, -50%) translateZ(9px) scale(1.06); }
+.env-seal:hover { transform: translate(-50%, -50%) scale(1.06); }
 .env-seal:focus-visible {
     outline: 2px solid var(--paper);
     outline-offset: 4px;
@@ -418,6 +407,12 @@ a { color: inherit; }
     animation: flap-open 0.9s var(--ease-flap) var(--t-flap) forwards;
     will-change: transform;
 }
+#envelope-screen.is-opening .flap-outer {
+    animation: face-out 0.9s var(--ease-flap) var(--t-flap) forwards;
+}
+#envelope-screen.is-opening .flap-inner {
+    animation: face-in 0.9s var(--ease-flap) var(--t-flap) forwards;
+}
 /* The letter is never scaled — that is what keeps its type crisp. */
 #envelope-screen.is-opening .env-letter {
     animation: letter-rise 0.9s var(--ease-out) var(--t-letter) forwards;
@@ -437,7 +432,7 @@ a { color: inherit; }
 @keyframes fade-out { to { opacity: 0; } }
 
 @keyframes seal-press {
-    to { transform: translate(-50%, -50%) translateZ(9px) scale(0.93); }
+    to { transform: translate(-50%, -50%) scale(0.93); }
 }
 @keyframes seal-crack {
     0%   { opacity: 0; }
@@ -455,28 +450,37 @@ a { color: inherit; }
     100% { transform: translate(21%, 38%) rotate(17deg); opacity: 0; }
 }
 
-/* The flap travels backwards in Z as it opens, so the rising letter passes
-   in front of it. It stops at 150° rather than lying flat at 180°: a flat
-   flap becomes a triangle sitting in exactly the space the letter rises
-   into, so the letter covers all of it and the lining survives only as a
-   fringe — which looks like clipping. Left standing, it stays foreshortened
-   and clearly behind. The overshoot past the resting angle reads as paper. */
+/* The flip. z-index steps at the halfway point, where the flap is edge-on
+   and a hair tall: before that it is the front of the envelope covering the
+   notch, after it is folded back and the letter must rise in front of it.
+   The slight overshoot past -1 reads as paper springing open. */
 @keyframes flap-open {
-    0%   { transform: translateZ(7px) rotateX(0deg); }
-    62%  { transform: translateZ(2px) rotateX(-159deg); }
-    100% { transform: translateZ(-3px) rotateX(-150deg); }
+    0%   { transform: scaleY(1);     z-index: 4; }
+    49%  {                           z-index: 4; }
+    50%  {                           z-index: 1; }
+    68%  { transform: scaleY(-1.05); }
+    100% { transform: scaleY(-1);    z-index: 1; }
 }
 
-/* The letter holds Z=2 throughout. It must stay behind the front panel at
-   Z=6 for the whole rise — that is what makes it emerge from the envelope
-   rather than slide across it. It doesn't need to come forward to clear the
-   flap, because the flap has already travelled back to Z=-3 by then.
-   The overshoot at 82% is what makes it feel drawn out by hand. */
+/* The two faces trade places as the flip passes edge-on, which is where a
+   real flap would start showing its lining. */
+@keyframes face-out {
+    0%, 49%   { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+@keyframes face-in {
+    0%, 49%   { opacity: 0; }
+    50%, 100% { opacity: 1; }
+}
+
+/* The letter stays at z-index 2, behind the front panel, for the whole rise
+   — that is what makes it emerge from the envelope rather than slide across
+   it. The overshoot at 82% is what makes it feel drawn out by hand. */
 @keyframes letter-rise {
-    0%   { transform: translateZ(2px) translateY(0) rotateZ(0deg); }
-    55%  { transform: translateZ(2px) translateY(-52%) rotateZ(-0.6deg); }
-    82%  { transform: translateZ(2px) translateY(-90%) rotateZ(0.5deg); }
-    100% { transform: translateZ(2px) translateY(-85%) rotateZ(0deg); }
+    0%   { transform: translateY(0) rotate(0deg); }
+    55%  { transform: translateY(-52%) rotate(-0.6deg); }
+    82%  { transform: translateY(-90%) rotate(0.5deg); }
+    100% { transform: translateY(-85%) rotate(0deg); }
 }
 
 /* The intro leaves whole — envelope, letter and backdrop as one object.
@@ -491,15 +495,6 @@ a { color: inherit; }
 @keyframes hero-settle {
     from { transform: translateY(6%) scale(1.06); }
     to   { transform: translateY(0) scale(1); }
-}
-
-/* Should a browser lack 3D transforms entirely, skip the theatre. */
-@supports not (transform-style: preserve-3d) {
-    .flap-inner { display: none; }
-    #envelope-screen.is-opening .env-flap,
-    #envelope-screen.is-opening .env-letter {
-        animation: fade-out 0.4s ease forwards;
-    }
 }
 
 .tap-hint {

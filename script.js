@@ -43,28 +43,6 @@ window.addEventListener('error', () => {
     envelopeScreen.remove();
 });
 
-// ============ Pointer tilt ============
-// Desktop only: phones get the idle float in CSS instead. deviceorientation
-// is deliberately not used — on iOS it would greet every guest with a
-// permission dialog for the sake of a few degrees of parallax.
-if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    let queued = false;
-    let tiltX = 0;
-    let tiltY = 0;
-
-    envelopeScreen.addEventListener('mousemove', (e) => {
-        tiltY = (e.clientX / window.innerWidth - 0.5) * 12;
-        tiltX = (e.clientY / window.innerHeight - 0.5) * -8;
-        if (queued) return;
-        queued = true;
-        requestAnimationFrame(() => {
-            envelope.style.setProperty('--tilt-x', tiltX.toFixed(2) + 'deg');
-            envelope.style.setProperty('--tilt-y', tiltY.toFixed(2) + 'deg');
-            queued = false;
-        });
-    });
-}
-
 // ============ Language (RO / EN) ============
 // Every string comes from CONTENT in content.js, keyed by the data-i18n
 // attributes in the markup. Nothing is duplicated in the DOM.

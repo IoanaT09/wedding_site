@@ -20,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=17">
+    <link rel="stylesheet" href="style.css?v=18">
 
     <!-- Text is injected from content.js, so with JS off there is nothing to
          show. Hide the envelope and explain, rather than sit on a dead page. -->
@@ -44,12 +44,9 @@
 </noscript>
 
 <!-- ===================== ENVELOPE INTRO =====================
-     A real 3D scene: depth comes from translateZ, not z-index, so the
-     letter is occluded by the pocket until it clears the top edge.
-       .env-stage  owns the perspective (must stay free of overflow/opacity/
-                   filter — any of those would flatten the 3D context)
-       .envelope   owns the pointer tilt
-       .env-body   owns the idle float
+     Plain 2D: the parts stack with z-index and only transform and opacity
+     are animated. Order below is also paint order —
+     shadow, back, letter, front panel, flap, seal.
      ========================================================== -->
 <div id="envelope-screen">
     <div class="env-scrim" aria-hidden="true"></div>
@@ -221,7 +218,7 @@
 
 </div>
 
-<script src="content.js?v=17"></script>
-<script src="script.js?v=17"></script>
+<script src="content.js?v=18"></script>
+<script src="script.js?v=18"></script>
 </body>
 </html>
