@@ -343,20 +343,20 @@ a { color: inherit; }
     transform: translate(-50%, -50%);
     z-index: 5;
     transition: transform var(--dur-fast) ease;
+    /* Shadows the actual composited alpha shape (the organic wax halves),
+       not an approximating circle — a plain box-shadow on a border-radius
+       circle was leaving a visible ring where its fixed radius didn't match
+       the wax's own irregular, wobbly edge. */
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.45));
 }
-/* The wax art in seal.svg doesn't quite reach the corners of its square
-   canvas, so without this the paper behind would show through there.
-   Clipping the whole face to a circle removes that gap outright. */
+/* Trims the literal corners of the square where the wax art doesn't reach —
+   harmless and cheap; the wax's own irregular edge is well inside this. */
 .seal-face {
     position: absolute;
     inset: 0;
     border-radius: 50%;
     overflow: hidden;
 }
-/* Both halves paint the identical full seal and are then clipped, so the wax
-   lines up exactly until it breaks. Crucially neither carries a shadow of
-   its own — that was what made the seam visible before. All shading is
-   baked into seal.svg, and the drop shadow lives on ::after below. */
 .seal-half {
     position: absolute;
     inset: 0;
@@ -369,15 +369,6 @@ a { color: inherit; }
    image, so the overlap itself is invisible. */
 .seal-left  { clip-path: polygon(0 0, 54% 0, 50% 100%, 0 100%); }
 .seal-right { clip-path: polygon(50% 0, 100% 0, 100% 100%, 46% 100%); }
-
-/* Drop shadow, on an unclipped layer so it can't produce a seam. */
-.env-seal::after {
-    content: '';
-    position: absolute;
-    inset: 4%;
-    border-radius: 50%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45);
-}
 
 .seal-mark {
     position: relative;
@@ -412,10 +403,10 @@ a { color: inherit; }
 #envelope-screen.is-opening .env-seal {
     animation: seal-press 0.12s ease forwards;
 }
-/* The circle clip on .seal-face is only for the static corner gap — once
-   the halves start flying apart on breaking, they need to move past it. */
+/* The circle clip on .seal-face is only for the static gap — once the
+   halves start flying apart on breaking, they need to move past it. */
 #envelope-screen.is-opening .seal-face {
-    overflow: visible;
+    clip-path: none;
 }
 #envelope-screen.is-opening .env-seal::before {
     animation: seal-crack 0.5s ease var(--t-seal) forwards;
@@ -431,10 +422,6 @@ a { color: inherit; }
 #envelope-screen.is-opening .seal-right {
     animation: seal-part-right 0.6s cubic-bezier(.36, .04, .5, 1) calc(var(--t-seal) + 0.05s) forwards;
 }
-#envelope-screen.is-opening .env-seal::after {
-    animation: fade-out 0.25s ease var(--t-seal) forwards;
-}
-
 /* will-change is set only for the sequence; the whole screen is removed
    from the DOM afterwards, so the hint is never left switched on. */
 #envelope-screen.is-opening .env-flap {
@@ -613,7 +600,7 @@ a { color: inherit; }
        over them. */
     justify-content: flex-end;
     text-align: center;
-    padding: var(--space-xl) var(--gutter) var(--space-2xl);
+    padding: var(--space-xl) var(--gutter) calc(var(--space-2xl) + var(--space-xl));
     /* Graded rather than flat: the photo stays open at the top and darkens
        towards the bottom, where the type sits. */
     --hero-grade: linear-gradient(180deg, rgba(20, 21, 17, 0.3) 0%, rgba(20, 21, 17, 0.5) 45%, rgba(20, 21, 17, 0.78) 100%);
@@ -691,13 +678,6 @@ a { color: inherit; }
     font-size: var(--text-base);
     color: var(--paper);
     margin-top: var(--space-md);
-}
-
-.hero-rule {
-    width: 1px;
-    height: 64px;
-    background: linear-gradient(var(--gold), rgba(189, 149, 87, 0));
-    margin-top: var(--space-lg);
 }
 
 /* ===========================================================================
