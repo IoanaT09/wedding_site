@@ -6,7 +6,6 @@
 //
 //  STILL TO FILL IN (search for "[" to find them):
 //    - ceremony + reception venue names
-//    - the dress code
 //    - the welcome paragraph ("[X] years together")
 //  Elsewhere:
 //    - the RSVP link (href in index.html, currently YOUR_GOOGLE_FORM_LINK)
@@ -16,7 +15,7 @@
 
 // When it all happens. Drives the countdown; the calendar file has its own
 // copy of these times in UTC.
-const WEDDING = '2026-10-03T15:00:00+02:00';
+const WEDDING = '2026-10-03T16:00:00+02:00';
 
 // The gallery, in order. Swap these filenames for the real photographs —
 // anything the browser can display works, and the grid crops them to 4:5.
@@ -38,21 +37,21 @@ const CONTENT = {
         'envelope.hint': 'apasă sigiliul pentru a deschide',
 
         'hero.eyebrow': 'Ne căsătorim',
-        'hero.date': '3 octombrie 2026',
+        'hero.date': '3 Octombrie 2026',
 
-        'welcome.eyebrow': 'Dragă invitat',
-        'welcome.body': 'După [X] ani împreună, în sfârșit facem pasul cel mare — și nu ne-am dori nimic mai mult decât să sărbătorim alături de oamenii care contează cel mai mult pentru noi.',
+        'welcome.body': 'Vă invităm, împreună cu părinții noștri, să participați la momentul în care două vieți devin una, două jumătăți devin un întreg, doi prieteni devin soț și soție.',
+        'welcome.godparents.intro': 'Ne bucurăm să îi avem ca nași pe',
+        'welcome.godparents.pair1.names': 'Mihai & Iulia',
+        'welcome.godparents.pair1.surname': 'Greblă',
+        'welcome.godparents.pair2.names': 'George & Mandy',
+        'welcome.godparents.pair2.surname': 'Tămaș',
 
-        'details.eyebrow': 'Detalii',
         'details.ceremony.label': 'Ceremonia',
-        'details.ceremony.value': '3 octombrie 2026 · 15:00',
-        'details.ceremony.sub': '[Biserica / locația], Viena',
+        'details.ceremony.value': '3 octombrie 2026 · 16:00',
+        'details.ceremony.sub': 'Catedrala Ortodoxă Sfânta Vineri, Zalău',
         'details.reception.label': 'Petrecerea',
         'details.reception.value': '3 octombrie 2026 · 18:00',
-        'details.reception.sub': '[Locația petrecerii], Viena',
-        'details.dress.label': 'Ținută',
-        'details.dress.value': '[Elegantă / de grădină / etc.]',
-        'details.dress.sub': 'Recomandăm pantofi comozi',
+        'details.reception.sub': 'Restaurant Brilliant Parc - Sala Belvedere , Zalău',
         'details.map': 'Vezi harta',
         'details.calendar': 'Adaugă în calendar',
         'calendar.summary': 'Nunta Ioanei și a lui Rareș',
@@ -65,13 +64,6 @@ const CONTENT = {
 
         'gallery.eyebrow': 'Noi doi',
         'gallery.alt': 'Ioana și Rareș',
-
-        'timeline.eyebrow': 'Cum se desfășoară ziua',
-        'timeline.arrival': 'Sosirea invitaților',
-        'timeline.ceremony': 'Ceremonia',
-        'timeline.photos': 'Poze & cocktail',
-        'timeline.dinner': 'Cină & petrecere',
-        'timeline.dance': 'Primul dans & distracție',
 
         'rsvp.eyebrow': 'Vă rugăm confirmați până la',
         'rsvp.deadline': '1 septembrie 2026',
@@ -88,19 +80,19 @@ const CONTENT = {
         'hero.eyebrow': "We're getting married",
         'hero.date': '3 October 2026',
 
-        'welcome.eyebrow': 'Dear guest',
         'welcome.body': "After [X] years together, we're finally making it official — and we'd love nothing more than to celebrate with the people who mean the most to us.",
+        'welcome.godparents.intro': "We're delighted to have as godparents",
+        'welcome.godparents.pair1.names': 'Mihai & Iulia',
+        'welcome.godparents.pair1.surname': 'Greblă',
+        'welcome.godparents.pair2.names': 'George & Mandy',
+        'welcome.godparents.pair2.surname': 'Tămaș',
 
-        'details.eyebrow': 'The details',
         'details.ceremony.label': 'Ceremony',
-        'details.ceremony.value': '3 October 2026 · 15:00',
+        'details.ceremony.value': '3 October 2026 · 16:00',
         'details.ceremony.sub': '[Church / venue name], Vienna',
         'details.reception.label': 'Reception',
         'details.reception.value': '3 October 2026 · 18:00',
         'details.reception.sub': '[Reception venue name], Vienna',
-        'details.dress.label': 'Dress code',
-        'details.dress.value': '[Formal / Garden / etc.]',
-        'details.dress.sub': 'Comfortable shoes recommended',
         'details.map': 'View map',
         'details.calendar': 'Add to calendar',
         'calendar.summary': 'Ioana & Rareș — Wedding',
@@ -113,13 +105,6 @@ const CONTENT = {
 
         'gallery.eyebrow': 'The two of us',
         'gallery.alt': 'Ioana and Rareș',
-
-        'timeline.eyebrow': 'How the day unfolds',
-        'timeline.arrival': 'Guests arrive',
-        'timeline.ceremony': 'Ceremony',
-        'timeline.photos': 'Photos & drinks',
-        'timeline.dinner': 'Dinner & reception',
-        'timeline.dance': 'First dance & party',
 
         'rsvp.eyebrow': 'Kindly reply by',
         'rsvp.deadline': '1 September 2026',

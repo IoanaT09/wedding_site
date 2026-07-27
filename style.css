@@ -325,12 +325,12 @@ a { color: inherit; }
     position: absolute;
     left: 50%;
     top: 46%;
-    width: 18cqw;
-    height: 18cqw;
-    min-width: 46px;
-    min-height: 46px;
-    max-width: 130px;
-    max-height: 130px;
+    width: 21cqw;
+    height: 21cqw;
+    min-width: 54px;
+    min-height: 54px;
+    max-width: 150px;
+    max-height: 150px;
     /* Button reset — it's a real <button> so it's focusable and keyboard-operable.
        The wax itself is drawn by the two halves inside. */
     appearance: none;
@@ -343,6 +343,15 @@ a { color: inherit; }
     transform: translate(-50%, -50%);
     z-index: 5;
     transition: transform var(--dur-fast) ease;
+}
+/* The wax art in seal.svg doesn't quite reach the corners of its square
+   canvas, so without this the paper behind would show through there.
+   Clipping the whole face to a circle removes that gap outright. */
+.seal-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
 }
 /* Both halves paint the identical full seal and are then clipped, so the wax
    lines up exactly until it breaks. Crucially neither carries a shadow of
@@ -374,7 +383,7 @@ a { color: inherit; }
     position: relative;
     font-family: var(--display);
     color: #F0DCD2;
-    font-size: 4cqw;
+    font-size: 4.6cqw;
     letter-spacing: 0.03em;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5), 0 -1px 0 rgba(255, 255, 255, 0.12);
 }
@@ -402,6 +411,11 @@ a { color: inherit; }
 
 #envelope-screen.is-opening .env-seal {
     animation: seal-press 0.12s ease forwards;
+}
+/* The circle clip on .seal-face is only for the static corner gap — once
+   the halves start flying apart on breaking, they need to move past it. */
+#envelope-screen.is-opening .seal-face {
+    overflow: visible;
 }
 #envelope-screen.is-opening .env-seal::before {
     animation: seal-crack 0.5s ease var(--t-seal) forwards;
@@ -636,7 +650,13 @@ a { color: inherit; }
     margin-bottom: var(--space-md);
 }
 .eyebrow.light { color: var(--gold); }
-.hero .eyebrow { color: var(--gold); }
+.hero .eyebrow {
+    color: var(--gold);
+    font-family: var(--body);
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: var(--text-base);
+}
 
 .names {
     font-family: var(--display);
@@ -666,9 +686,9 @@ a { color: inherit; }
 .hero .amp { color: var(--gold); }
 
 .hero-date {
-    font-family: var(--utility);
-    letter-spacing: 0.1em;
-    font-size: var(--text-sm);
+    font-family: var(--body);
+    letter-spacing: normal;
+    font-size: var(--text-base);
     color: var(--paper);
     margin-top: var(--space-md);
 }
@@ -728,14 +748,39 @@ a { color: inherit; }
     margin-inline: auto;
 }
 
+.godparents-intro {
+    font-size: var(--text-base);
+    line-height: var(--leading-body);
+    color: var(--ink);
+    max-width: var(--measure);
+    margin: var(--space-md) auto 0;
+}
+
+.godparents {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-lg) var(--space-xl);
+    margin-top: var(--space-sm);
+}
+.godparent-pair {
+    margin: 0;
+    line-height: 1.3;
+}
+.godparent-names,
+.godparent-surname {
+    display: block;
+    font-weight: 700;
+    color: var(--wine);
+}
+
 /* ===========================================================================
    DETAILS
    ======================================================================== */
 .details-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-lg) var(--space-md);
-    margin-top: var(--space-xl);
 }
 @media (max-width: 720px) {
     .details-grid { grid-template-columns: 1fr; }
@@ -764,8 +809,7 @@ a { color: inherit; }
 
 /* Each item arrives just after the one before it. */
 .details-grid .reveal,
-.gallery .reveal,
-.timeline .reveal { transition-delay: calc(var(--i, 0) * 0.09s); }
+.gallery .reveal { transition-delay: calc(var(--i, 0) * 0.09s); }
 
 .detail-link {
     display: inline-block;
@@ -881,63 +925,6 @@ a { color: inherit; }
 }
 
 /* ===========================================================================
-   TIMELINE
-   ======================================================================== */
-/* A rail with a dot per moment, rather than a stack of ruled rows.
-   --rail-x is derived from the column and gap so the line, the dots and the
-   text can never drift out of alignment. */
-.timeline {
-    --time-col: 3.2rem;
-    --rail-gap: 1.5rem;
-    --rail-x: calc(var(--time-col) + var(--rail-gap) / 2);
-    position: relative;
-    list-style: none;
-    margin: var(--space-xl) auto 0;
-    padding: 0;
-    max-width: 26rem;
-    text-align: left;
-}
-/* The rail fades out at both ends instead of stopping dead. */
-.timeline::before {
-    content: '';
-    position: absolute;
-    top: 0.9rem;
-    bottom: 0.9rem;
-    left: var(--rail-x);
-    width: 1px;
-    background: linear-gradient(rgba(92, 31, 46, 0), rgba(92, 31, 46, 0.28) 12%, rgba(92, 31, 46, 0.28) 88%, rgba(92, 31, 46, 0));
-}
-.timeline li {
-    position: relative;
-    display: grid;
-    grid-template-columns: var(--time-col) 1fr;
-    column-gap: var(--rail-gap);
-    align-items: baseline;
-    padding: var(--space-xs) 0;
-}
-/* The ring is paper-coloured, so the dot appears to interrupt the rail. */
-.timeline li::before {
-    content: '';
-    position: absolute;
-    left: var(--rail-x);
-    top: 1.15rem;
-    width: 7px;
-    height: 7px;
-    margin-left: -3px;
-    border-radius: 50%;
-    background: var(--wine);
-    box-shadow: 0 0 0 4px var(--paper);
-}
-.time {
-    font-family: var(--utility);
-    letter-spacing: 0.06em;
-    color: var(--wine);
-    font-size: var(--text-sm);
-    text-align: right;
-}
-.event { font-size: var(--text-base); }
-
-/* ===========================================================================
    RSVP + FOOTER
    ======================================================================== */
 .rsvp-deadline {
@@ -972,6 +959,7 @@ a { color: inherit; }
     border-top: 1px solid rgba(189, 149, 87, 0.25);
 }
 .footer p { margin: 0; }
+.footer-names { font-family: var(--display); }
 .footer .amp { color: var(--gold); }
 
 /* ===========================================================================
