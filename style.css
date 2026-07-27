@@ -147,11 +147,12 @@ a { color: inherit; }
 
 /* On phones the group has less room to begin with, so the same upward push
    that suits larger screens eats into the letter's rise headroom above the
-   envelope. Even top/bottom padding here brings the whole group down a bit. */
+   envelope. A touch more top padding than bottom here brings the whole
+   group down a bit instead. */
 @media (max-width: 699px) {
     #envelope-screen {
         gap: var(--space-md);
-        padding: var(--space-md) var(--gutter);
+        padding: calc(var(--space-md) + var(--space-sm)) var(--gutter) var(--space-md);
     }
 }
 
