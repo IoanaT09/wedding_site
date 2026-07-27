@@ -6,7 +6,7 @@
    ======================================================================== */
 :root {
     /* ---- Colour ---- */
-    --paper: #F7F2E8;
+    --paper: #FFFFF0;
     --paper-dark: #EDE5D3;
     --ink: #22241E;
     --wine: #5C1F2E;
@@ -14,6 +14,7 @@
     --gold: #BD9557;          /* lightened from #A9834B so small gold text on dark stays legible */
     --sage: #6B7457;
     --wine-deep: #3A1420;
+    --forest: #38432A;
     --on-dark: #F4EEE2;
     --on-dark-muted: rgba(244, 238, 226, 0.82);
 
@@ -136,15 +137,16 @@ a { color: inherit; }
     align-items: center;
     justify-content: center;
     gap: var(--space-lg);
-    padding: var(--space-md) var(--gutter);
+    /* Extra bottom padding pulls the centred group up a touch, making room
+       for the flower decor under the tap hint without crowding it. */
+    padding: var(--space-md) var(--gutter) calc(var(--space-md) + var(--space-xl));
     z-index: 100;
 }
 
 .env-scrim {
     position: absolute;
     inset: 0;
-    background: var(--vignette), var(--lattice) repeat;
-    background-color: var(--wine-deep);
+    background: var(--forest);
 }
 
 .env-stage {
@@ -429,6 +431,7 @@ a { color: inherit; }
     will-change: transform;
 }
 #envelope-screen.is-opening .tap-hint,
+#envelope-screen.is-opening .env-flower,
 #envelope-screen.is-opening #lang-toggle-env {
     animation: fade-out 0.25s ease forwards;
 }
@@ -508,6 +511,13 @@ a { color: inherit; }
     text-transform: uppercase;
     font-size: var(--text-xs);
     opacity: 0.75;
+    position: relative;
+}
+
+.env-flower {
+    width: clamp(160px, 46vw, 320px);
+    height: auto;
+    opacity: 0.9;
     position: relative;
 }
 
@@ -647,8 +657,7 @@ a { color: inherit; }
 .section { position: relative; padding: var(--space-2xl) var(--gutter); }
 .section.paper { background: var(--paper); }
 .section.ink {
-    background: var(--vignette), var(--lattice) repeat;
-    background-color: var(--wine-deep);
+    background: var(--forest);
     color: var(--on-dark);
 }
 
