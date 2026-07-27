@@ -55,7 +55,7 @@ const CONTENT = {
         'details.dress.sub': 'Recomandăm pantofi comozi',
         'details.map': 'Vezi harta',
         'details.calendar': 'Adaugă în calendar',
-        'calendar.summary': 'Nunta lui Rareș și a Ioanei',
+        'calendar.summary': 'Nunta Ioanei și a lui Rareș',
 
         'countdown.eyebrow': 'Până în ziua cea mare',
         'countdown.days': 'zile',
@@ -64,7 +64,7 @@ const CONTENT = {
         'countdown.past': 'Vă mulțumim că ați sărbătorit alături de noi.',
 
         'gallery.eyebrow': 'Noi doi',
-        'gallery.alt': 'Rareș și Ioana',
+        'gallery.alt': 'Ioana și Rareș',
 
         'timeline.eyebrow': 'Cum se desfășoară ziua',
         'timeline.arrival': 'Sosirea invitaților',
@@ -103,7 +103,7 @@ const CONTENT = {
         'details.dress.sub': 'Comfortable shoes recommended',
         'details.map': 'View map',
         'details.calendar': 'Add to calendar',
-        'calendar.summary': 'Rareș & Ioana — Wedding',
+        'calendar.summary': 'Ioana & Rareș — Wedding',
 
         'countdown.eyebrow': 'Until the day',
         'countdown.days': 'days',
@@ -112,7 +112,7 @@ const CONTENT = {
         'countdown.past': 'Thank you for celebrating with us.',
 
         'gallery.eyebrow': 'The two of us',
-        'gallery.alt': 'Rareș and Ioana',
+        'gallery.alt': 'Ioana and Rareș',
 
         'timeline.eyebrow': 'How the day unfolds',
         'timeline.arrival': 'Guests arrive',

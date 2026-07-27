@@ -316,8 +316,9 @@ a { color: inherit; }
    swap over as the flip passes through zero — see face-out / face-in. */
 .flap-inner {
     opacity: 0;
-    /* Darkest at the hinge, which stays at the top through the flip. */
-    background: linear-gradient(180deg, #3A1119 0%, var(--wine) 55%, var(--wine-light) 100%);
+    /* Darkest at the hinge, which stays at the top through the flip. Paper
+       tones, matching the rest of the envelope rather than a wine lining. */
+    background: linear-gradient(180deg, #C9BC9E 0%, var(--paper-dark) 55%, var(--paper) 100%);
 }
 
 .env-seal {
@@ -587,15 +588,18 @@ a { color: inherit; }
 .hero {
     /* Which part of the photo to keep when it's cropped. The only knob you
        should need to touch if the crop looks wrong on a given screen. */
-    --hero-focus: 20% 90%;
+    --hero-focus: 50% 22%;
     position: relative;
     min-height: 100svh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    /* Pushed toward the bottom rather than centered, so the text sits in the
+       darkest, most legible part of the grade below the faces instead of
+       over them. */
+    justify-content: flex-end;
     text-align: center;
-    padding: var(--space-xl) var(--gutter);
+    padding: var(--space-xl) var(--gutter) var(--space-2xl);
     /* Graded rather than flat: the photo stays open at the top and darkens
        towards the bottom, where the type sits. */
     --hero-grade: linear-gradient(180deg, rgba(20, 21, 17, 0.3) 0%, rgba(20, 21, 17, 0.5) 45%, rgba(20, 21, 17, 0.78) 100%);

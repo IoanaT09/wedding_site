@@ -146,7 +146,7 @@ function buildIcs() {
     return [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
-        'PRODID:-//Rares & Ioana//Wedding//EN',
+        'PRODID:-//Ioana & Rares//Wedding//EN',
         'BEGIN:VEVENT',
         'UID:wedding-' + icsStamp(start) + '@rares-ioana',
         'DTSTAMP:' + icsStamp(new Date()),
