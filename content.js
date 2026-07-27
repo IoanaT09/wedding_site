@@ -4,10 +4,7 @@
 //  To change any wording, edit this file — nothing else. Each key below
 //  matches a data-i18n="..." attribute in index.html.
 //
-//  STILL TO FILL IN (search for "[" to find them):
-//    - ceremony + reception venue names
-//    - the welcome paragraph ("[X] years together")
-//  Elsewhere:
+//  STILL TO FILL IN, elsewhere in the project:
 //    - the RSVP link (href in index.html, currently YOUR_GOOGLE_FORM_LINK)
 //    - the map links (hrefs in index.html, currently REPLACE+WITH+ADDRESS)
 //    - YOUR_SITE_URL in the share-preview tags in index.html
@@ -41,16 +38,17 @@ const CONTENT = {
 
         'welcome.body': 'Vă invităm, împreună cu părinții noștri, să participați la momentul în care două vieți devin una, două jumătăți devin un întreg, doi prieteni devin soț și soție.',
         'welcome.godparents.intro': 'Ne bucurăm să îi avem ca nași pe',
-        'welcome.godparents.pair1.names': 'Mihai & Iulia',
-        'welcome.godparents.pair1.surname': 'Greblă',
+        'welcome.godparents.pair1.names': 'Mihai Greblă &',
+        'welcome.godparents.pair1.surname': 'Iulia Tuduce',
         'welcome.godparents.pair2.names': 'George & Mandy',
         'welcome.godparents.pair2.surname': 'Tămaș',
 
+        'details.date': '3 octombrie 2026',
         'details.ceremony.label': 'Ceremonia',
-        'details.ceremony.value': '3 octombrie 2026 · 16:00',
+        'details.ceremony.value': 'Ora 16:00',
         'details.ceremony.sub': 'Catedrala Ortodoxă Sfânta Vineri, Zalău',
         'details.reception.label': 'Petrecerea',
-        'details.reception.value': '3 octombrie 2026 · 18:00',
+        'details.reception.value': 'Ora 18:00',
         'details.reception.sub': 'Restaurant Brilliant Parc - Sala Belvedere , Zalău',
         'details.map': 'Vezi harta',
         'details.calendar': 'Adaugă în calendar',
@@ -80,19 +78,20 @@ const CONTENT = {
         'hero.eyebrow': "We're getting married",
         'hero.date': '3 October 2026',
 
-        'welcome.body': "After [X] years together, we're finally making it official — and we'd love nothing more than to celebrate with the people who mean the most to us.",
+        'welcome.body': 'Together with our parents, we invite you to witness the moment two lives become one, two halves become whole, and two friends become husband and wife.',
         'welcome.godparents.intro': "We're delighted to have as godparents",
-        'welcome.godparents.pair1.names': 'Mihai & Iulia',
-        'welcome.godparents.pair1.surname': 'Greblă',
+        'welcome.godparents.pair1.names': 'Mihai Greblă &',
+        'welcome.godparents.pair1.surname': 'Iulia Tuduce',
         'welcome.godparents.pair2.names': 'George & Mandy',
         'welcome.godparents.pair2.surname': 'Tămaș',
 
+        'details.date': '3 October 2026',
         'details.ceremony.label': 'Ceremony',
-        'details.ceremony.value': '3 October 2026 · 16:00',
-        'details.ceremony.sub': '[Church / venue name], Vienna',
+        'details.ceremony.value': '16:00',
+        'details.ceremony.sub': 'Sfânta Vineri Orthodox Cathedral, Zalău',
         'details.reception.label': 'Reception',
-        'details.reception.value': '3 October 2026 · 18:00',
-        'details.reception.sub': '[Reception venue name], Vienna',
+        'details.reception.value': '18:00',
+        'details.reception.sub': 'Brilliant Parc Restaurant – Belvedere Hall, Zalău',
         'details.map': 'View map',
         'details.calendar': 'Add to calendar',
         'calendar.summary': 'Ioana & Rareș — Wedding',

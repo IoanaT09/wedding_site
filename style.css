@@ -777,10 +777,18 @@ a { color: inherit; }
 /* ===========================================================================
    DETAILS
    ======================================================================== */
+.details-date {
+    font-family: var(--display);
+    font-size: var(--text-lg);
+    text-align: center;
+    color: var(--on-dark);
+    margin: 0;
+}
 .details-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-lg) var(--space-md);
+    margin-top: var(--space-xl);
 }
 @media (max-width: 720px) {
     .details-grid { grid-template-columns: 1fr; }
@@ -792,19 +800,18 @@ a { color: inherit; }
     }
 }
 
-/* Open, not boxed: a short gold rule does the work the border was doing. */
+/* Open, not boxed: a small gold glyph does the work the border was doing. */
 .detail-card { padding: 0 var(--space-2xs); }
-.detail-card::before {
-    content: '';
+.detail-icon {
     display: block;
-    width: 26px;
-    height: 1px;
+    width: 28px;
+    height: 28px;
     margin: 0 auto var(--space-md);
-    background: var(--gold);
-    opacity: 0.85;
+    color: var(--gold);
+    opacity: 0.9;
 }
 @media (max-width: 720px) {
-    .detail-card + .detail-card::before { margin-top: var(--space-2xs); }
+    .detail-card + .detail-card .detail-icon { margin-top: var(--space-2xs); }
 }
 
 /* Each item arrives just after the one before it. */
