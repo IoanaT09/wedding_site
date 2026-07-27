@@ -44,7 +44,7 @@ const CONTENT = {
         'welcome.godparents.pair2.names': 'George & Mandy',
         'welcome.godparents.pair2.surname': 'Tămaș',
 
-        'details.date': '3 octombrie 2026',
+        'details.date': '3 Octombrie 2026',
         'details.ceremony.label': 'Ceremonia',
         'details.ceremony.value': 'Ora 16:00',
         'details.ceremony.sub': 'Catedrala Ortodoxă Sfânta Vineri, Zalău',
@@ -65,7 +65,7 @@ const CONTENT = {
         'gallery.alt': 'Ioana și Rareș',
 
         'rsvp.eyebrow': 'Vă rugăm confirmați până la',
-        'rsvp.deadline': '1 septembrie 2026',
+        'rsvp.deadline': '1 Septembrie 2026',
         'rsvp.button': 'Confirmă prezența'
     },
 
