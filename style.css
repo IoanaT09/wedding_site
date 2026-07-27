@@ -138,9 +138,21 @@ a { color: inherit; }
     justify-content: center;
     gap: var(--space-lg);
     /* Extra bottom padding pulls the centred group up a touch, making room
-       for the flower decor under the tap hint without crowding it. */
+       for the flower decor under the tap hint without crowding it. Left off
+       on narrow screens (below), where the letter needs all the headroom
+       above the envelope it can get. */
     padding: var(--space-md) var(--gutter) calc(var(--space-md) + var(--space-xl));
     z-index: 100;
+}
+
+/* On phones the group has less room to begin with, so the same upward push
+   that suits larger screens eats into the letter's rise headroom above the
+   envelope. Even top/bottom padding here brings the whole group down a bit. */
+@media (max-width: 699px) {
+    #envelope-screen {
+        gap: var(--space-md);
+        padding: var(--space-md) var(--gutter);
+    }
 }
 
 .env-scrim {
