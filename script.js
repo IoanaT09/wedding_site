@@ -146,9 +146,9 @@ function buildIcs() {
     return [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
-        'PRODID:-//Ioana & Rares//Wedding//EN',
+        'PRODID:-//Rares & Ioana//Wedding//EN',
         'BEGIN:VEVENT',
-        'UID:wedding-' + icsStamp(start) + '@ioana-rares',
+        'UID:wedding-' + icsStamp(start) + '@rares-ioana',
         'DTSTAMP:' + icsStamp(new Date()),
         'DTSTART:' + icsStamp(start),
         'DTEND:' + icsStamp(end),
@@ -166,7 +166,7 @@ if (calendarBtn) {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'ioana-rares-2026-10-03.ics';
+        link.download = 'rares-ioana-2026-10-03.ics';
         link.click();
         URL.revokeObjectURL(url);
     });
