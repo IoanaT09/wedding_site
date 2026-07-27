@@ -337,9 +337,13 @@ a { color: inherit; }
     inset: 0;
     background: url('seal.svg') center / 100% 100% no-repeat;
 }
-/* Split slightly off-vertical: wax doesn't break along a plumb line. */
-.seal-left  { clip-path: polygon(0 0, 52% 0, 48% 100%, 0 100%); }
-.seal-right { clip-path: polygon(52% 0, 100% 0, 100% 100%, 48% 100%); }
+/* Split slightly off-vertical: wax doesn't break along a plumb line.
+   The two clip paths overlap by a couple of percent (rather than meeting
+   edge to edge) so anti-aliasing on the clip edge never leaves a hairline
+   gap showing the paper through at rest — both halves paint the same
+   image, so the overlap itself is invisible. */
+.seal-left  { clip-path: polygon(0 0, 54% 0, 50% 100%, 0 100%); }
+.seal-right { clip-path: polygon(50% 0, 100% 0, 100% 100%, 46% 100%); }
 
 /* Drop shadow, on an unclipped layer so it can't produce a seam. */
 .env-seal::after {
