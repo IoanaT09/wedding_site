@@ -3,46 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ioana &amp; Rares</title>
+    <title>Ioana &amp; Rareș · 3.10.2026</title>
+    <meta name="description" content="Ioana și Rareș se căsătoresc pe 3 octombrie 2026 la Viena. · Ioana and Rareș are getting married on 3 October 2026 in Vienna.">
+    <meta name="theme-color" content="#3A1420">
+    <link rel="icon" href="seal.svg">
+
+    <!-- Link preview for WhatsApp, iMessage and the rest. REPLACE YOUR_SITE_URL
+         with the real address once it's hosted — scrapers need absolute URLs. -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Ioana &amp; Rareș · 3.10.2026">
+    <meta property="og:description" content="Ne căsătorim la Viena și ne-ar bucura să fiți alături de noi. · We're getting married in Vienna and would love you there.">
+    <meta property="og:image" content="YOUR_SITE_URL/img/hero-photo.jpg">
+    <meta property="og:url" content="YOUR_SITE_URL/">
+    <meta name="twitter:card" content="summary_large_image">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=3">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=19">
+
+    <!-- Text is injected from content.js, so with JS off there is nothing to
+         show. Hide the envelope and explain, rather than sit on a dead page. -->
+    <noscript>
+        <style>
+            #envelope-screen { display: none !important; }
+        </style>
+    </noscript>
 </head>
 <body>
 
-<!-- ===================== ENVELOPE INTRO ===================== -->
+<!-- ===========================================================================
+     All wording comes from content.js via the data-i18n keys below.
+     Edit the text there, not here.
+     ======================================================================== -->
+
+<noscript>
+    <p class="noscript-note">
+        Această invitație are nevoie de JavaScript. · This invitation needs JavaScript.
+    </p>
+</noscript>
+
+<!-- ===================== ENVELOPE INTRO =====================
+     Plain 2D: the parts stack with z-index and only transform and opacity
+     are animated. Order below is also paint order —
+     shadow, back, letter, front panel, flap, seal.
+     ========================================================== -->
 <div id="envelope-screen">
-    <button id="lang-toggle-env" class="lang-toggle" aria-label="Switch language">EN</button>
-    <div class="envelope" id="envelope">
-        <div class="env-back"></div>
-        <div class="env-letter">
-            <p class="letter-eyebrow lang lang-en" hidden>You are invited</p>
-            <p class="letter-eyebrow lang lang-ro">Sunteți invitați</p>
-            <p class="letter-names">Ioana <span class="amp">&amp;</span> Rareș</p>
-            <p class="letter-date">3 . 10 . 2026</p>
-        </div>
-        <div class="env-flap"></div>
-        <div class="env-seal" id="seal">
-            <span>I&amp;R</span>
+    <div class="env-scrim" aria-hidden="true"></div>
+    <button id="lang-toggle-env" class="lang-toggle" data-i18n-aria-label="a11y.lang"></button>
+
+    <div class="env-stage">
+        <div class="envelope" id="envelope">
+            <div class="env-body">
+                <div class="env-shadow" aria-hidden="true"></div>
+                <div class="env-back" aria-hidden="true"></div>
+
+                <div class="env-letter">
+                    <p class="letter-eyebrow" data-i18n="envelope.eyebrow"></p>
+                    <p class="letter-names">Ioana <span class="amp">&amp;</span> Rareș</p>
+                    <p class="letter-date">3 . 10 . 2026</p>
+                </div>
+
+                <!-- Front panel, with the V cut out so the letter is visible
+                     inside once the flap lifts. The notch is inset slightly
+                     so the closed flap overhangs it — see style.css. -->
+                <div class="env-pocket" aria-hidden="true"></div>
+
+                <div class="env-flap" aria-hidden="true">
+                    <div class="flap-face flap-outer"></div>
+                    <div class="flap-face flap-inner"></div>
+                </div>
+
+                <button type="button" class="env-seal" id="seal" data-i18n-aria-label="a11y.open">
+                    <span class="seal-half seal-left" aria-hidden="true"></span>
+                    <span class="seal-half seal-right" aria-hidden="true"></span>
+                    <span class="seal-mark">I&amp;R</span>
+                </button>
+            </div>
         </div>
     </div>
-    <p class="tap-hint lang lang-en" hidden>tap the seal to open</p>
-    <p class="tap-hint lang lang-ro">apasă sigiliul pentru a deschide</p>
+
+    <p class="tap-hint" data-i18n="envelope.hint"></p>
 </div>
 
 <!-- ===================== SITE ===================== -->
 <div id="site" hidden>
 
     <!-- language toggle -->
-    <button id="lang-toggle" class="lang-toggle" aria-label="Switch language">RO</button>
+    <button id="lang-toggle" class="lang-toggle" data-i18n-aria-label="a11y.lang"></button>
 
-    <!-- HERO -->
-    <header class="hero reveal" data-reveal="fade-up">
-        <p class="eyebrow lang lang-en">We're getting married</p>
-        <p class="eyebrow lang lang-ro" hidden>Ne căsătorim</p>
+    <!-- HERO — entrance is driven by #site.is-entering, not the scroll
+         observer, so it stays in step with the intro leaving. -->
+    <header class="hero">
+        <p class="eyebrow" data-i18n="hero.eyebrow"></p>
         <h1 class="names">Ioana <span class="amp">&amp;</span> Rareș</h1>
-        <p class="hero-date">3 Oct 2026</p>
+        <p class="hero-date" data-i18n="hero.date"></p>
         <div class="hero-rule" aria-hidden="true"></div>
     </header>
 
@@ -50,49 +105,83 @@
     <section class="section paper" id="welcome">
         <div class="crease" aria-hidden="true"></div>
         <div class="section-inner reveal" data-reveal="fade-up">
-            <p class="eyebrow lang lang-en">Dear guest</p>
-            <p class="eyebrow lang lang-ro" hidden>Dragă invitat</p>
-            <p class="body-text lang lang-en">
-                After [X] years together, we're finally making it official — and we'd love nothing more
-                than to celebrate with the people who mean the most to us. Replace this paragraph with
-                your own story: how you met, a favourite memory, or simply a warm welcome.
-            </p>
-            <p class="body-text lang lang-ro" hidden>
-                După [X] ani împreună, în sfârșit facem pasul cel mare — și nu ne-am dori nimic mai mult
-                decât să sărbătorim alături de oamenii care contează cel mai mult pentru noi. Înlocuiește
-                acest paragraf cu povestea voastră: cum v-ați cunoscut, o amintire dragă, sau pur și simplu
-                un bun venit călduros.
-            </p>
+            <p class="eyebrow" data-i18n="welcome.eyebrow"></p>
+            <p class="body-text" data-i18n="welcome.body"></p>
+        </div>
+    </section>
+
+    <!-- COUNTDOWN -->
+    <section class="section paper countdown-section" id="countdown">
+        <div class="crease" aria-hidden="true"></div>
+        <div class="section-inner reveal" data-reveal="fade-up">
+            <p class="eyebrow" data-i18n="countdown.eyebrow"></p>
+            <!-- Filled in by script.js; the dashes are what shows if it can't be. -->
+            <div class="countdown" id="countdown-units">
+                <div class="cd-unit">
+                    <span class="cd-num" data-cd="days">–</span>
+                    <span class="cd-label" data-i18n="countdown.days"></span>
+                </div>
+                <div class="cd-unit">
+                    <span class="cd-num" data-cd="hours">–</span>
+                    <span class="cd-label" data-i18n="countdown.hours"></span>
+                </div>
+                <div class="cd-unit">
+                    <span class="cd-num" data-cd="minutes">–</span>
+                    <span class="cd-label" data-i18n="countdown.minutes"></span>
+                </div>
+            </div>
+            <p class="countdown-past" data-i18n="countdown.past" hidden></p>
         </div>
     </section>
 
     <!-- DETAILS -->
     <section class="section ink" id="details">
         <div class="section-inner">
-            <p class="eyebrow light lang lang-en reveal" data-reveal="fade-up">The details</p>
-            <p class="eyebrow light lang lang-ro" hidden data-reveal="fade-up">Detalii</p>
+            <div class="reveal" data-reveal="fade-up">
+                <p class="eyebrow light" data-i18n="details.eyebrow"></p>
+            </div>
 
+            <!-- --i staggers each item's reveal; see .details-grid .reveal -->
             <div class="details-grid">
-                <div class="detail-card reveal" data-reveal="fade-up">
-                    <p class="detail-label lang lang-en">Ceremony</p>
-                    <p class="detail-label lang lang-ro" hidden>Ceremonia</p>
-                    <p class="detail-value">3 October 2026 · 15:00</p>
-                    <p class="detail-sub">[Church / venue name], Vienna</p>
+                <div class="detail-card reveal" data-reveal="fade-up" style="--i:0">
+                    <p class="detail-label" data-i18n="details.ceremony.label"></p>
+                    <p class="detail-value" data-i18n="details.ceremony.value"></p>
+                    <p class="detail-sub" data-i18n="details.ceremony.sub"></p>
+                    <!-- Swap the query for the real address, keeping the + signs -->
+                    <a class="detail-link" data-i18n="details.map" target="_blank" rel="noopener"
+                       href="https://www.google.com/maps/search/?api=1&amp;query=REPLACE+WITH+CEREMONY+ADDRESS+Vienna"></a>
                 </div>
-                <div class="detail-card reveal" data-reveal="fade-up">
-                    <p class="detail-label lang lang-en">Reception</p>
-                    <p class="detail-label lang lang-ro" hidden>Petrecerea</p>
-                    <p class="detail-value">3 October 2026 · 18:00</p>
-                    <p class="detail-sub">[Reception venue name], Vienna</p>
+                <div class="detail-card reveal" data-reveal="fade-up" style="--i:1">
+                    <p class="detail-label" data-i18n="details.reception.label"></p>
+                    <p class="detail-value" data-i18n="details.reception.value"></p>
+                    <p class="detail-sub" data-i18n="details.reception.sub"></p>
+                    <a class="detail-link" data-i18n="details.map" target="_blank" rel="noopener"
+                       href="https://www.google.com/maps/search/?api=1&amp;query=REPLACE+WITH+RECEPTION+ADDRESS+Vienna"></a>
                 </div>
-                <div class="detail-card reveal" data-reveal="fade-up">
-                    <p class="detail-label lang lang-en">Dress code</p>
-                    <p class="detail-label lang lang-ro" hidden>Ținută</p>
-                    <p class="detail-value">[Formal / Garden / etc.]</p>
-                    <p class="detail-sub lang lang-en">Comfortable shoes recommended</p>
-                    <p class="detail-sub lang lang-ro" hidden>Recomandăm pantofi comozi</p>
+                <div class="detail-card reveal" data-reveal="fade-up" style="--i:2">
+                    <p class="detail-label" data-i18n="details.dress.label"></p>
+                    <p class="detail-value" data-i18n="details.dress.value"></p>
+                    <p class="detail-sub" data-i18n="details.dress.sub"></p>
                 </div>
             </div>
+
+            <!-- The calendar file is built in script.js from the same strings
+                 shown above, so there is no second copy of the details to
+                 keep in step. -->
+            <div class="calendar reveal" data-reveal="fade-up">
+                <button type="button" class="calendar-btn" id="calendar-btn" data-i18n="details.calendar"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY — images come from the GALLERY array in content.js -->
+    <section class="section paper" id="gallery">
+        <div class="crease" aria-hidden="true"></div>
+        <div class="section-inner wide">
+            <div class="reveal" data-reveal="fade-up">
+                <p class="eyebrow" data-i18n="gallery.eyebrow"></p>
+            </div>
+            <div class="gallery" id="gallery-grid"></div>
         </div>
     </section>
 
@@ -100,15 +189,16 @@
     <section class="section paper" id="timeline">
         <div class="crease" aria-hidden="true"></div>
         <div class="section-inner">
-            <p class="eyebrow lang lang-en reveal" data-reveal="fade-up">How the day unfolds</p>
-            <p class="eyebrow lang lang-ro" hidden data-reveal="fade-up">Cum se desfășoară ziua</p>
+            <div class="reveal" data-reveal="fade-up">
+                <p class="eyebrow" data-i18n="timeline.eyebrow"></p>
+            </div>
 
             <ol class="timeline">
-                <li class="reveal" data-reveal="fade-left"><span class="time">14:30</span><span class="event lang lang-en">Guests arrive</span><span class="event lang lang-ro" hidden>Sosirea invitaților</span></li>
-                <li class="reveal" data-reveal="fade-left"><span class="time">15:00</span><span class="event lang lang-en">Ceremony</span><span class="event lang lang-ro" hidden>Ceremonia</span></li>
-                <li class="reveal" data-reveal="fade-left"><span class="time">16:00</span><span class="event lang lang-en">Photos &amp; drinks</span><span class="event lang lang-ro" hidden>Poze &amp; cocktail</span></li>
-                <li class="reveal" data-reveal="fade-left"><span class="time">18:00</span><span class="event lang lang-en">Dinner &amp; reception</span><span class="event lang lang-ro" hidden>Cină &amp; petrecere</span></li>
-                <li class="reveal" data-reveal="fade-left"><span class="time">21:00</span><span class="event lang lang-en">First dance &amp; party</span><span class="event lang lang-ro" hidden>Primul dans &amp; distracție</span></li>
+                <li class="reveal" data-reveal="fade-left" style="--i:0"><span class="time">14:30</span><span class="event" data-i18n="timeline.arrival"></span></li>
+                <li class="reveal" data-reveal="fade-left" style="--i:1"><span class="time">15:00</span><span class="event" data-i18n="timeline.ceremony"></span></li>
+                <li class="reveal" data-reveal="fade-left" style="--i:2"><span class="time">16:00</span><span class="event" data-i18n="timeline.photos"></span></li>
+                <li class="reveal" data-reveal="fade-left" style="--i:3"><span class="time">18:00</span><span class="event" data-i18n="timeline.dinner"></span></li>
+                <li class="reveal" data-reveal="fade-left" style="--i:4"><span class="time">21:00</span><span class="event" data-i18n="timeline.dance"></span></li>
             </ol>
         </div>
     </section>
@@ -116,13 +206,9 @@
     <!-- RSVP -->
     <section class="section ink" id="rsvp">
         <div class="section-inner center reveal" data-reveal="fade-up">
-            <p class="eyebrow light lang lang-en">Kindly reply by</p>
-            <p class="eyebrow light lang lang-ro" hidden>Vă rugăm confirmați până la</p>
-            <p class="rsvp-deadline">1 September 2026</p>
-            <a href="YOUR_GOOGLE_FORM_LINK" target="_blank" rel="noopener" class="rsvp-btn">
-                <span class="lang lang-en">RSVP</span>
-                <span class="lang lang-ro" hidden>Confirmă prezența</span>
-            </a>
+            <p class="eyebrow light" data-i18n="rsvp.eyebrow"></p>
+            <p class="rsvp-deadline" data-i18n="rsvp.deadline"></p>
+            <a href="YOUR_GOOGLE_FORM_LINK" target="_blank" rel="noopener" class="rsvp-btn" data-i18n="rsvp.button"></a>
         </div>
     </section>
 
@@ -132,7 +218,7 @@
 
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="script.js?v=3"></script>
+<script src="content.js?v=19"></script>
+<script src="script.js?v=19"></script>
 </body>
 </html>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
+  <rect width="400" height="500" fill="#EDE5D3"/>
+  <g fill="none" stroke="#BD9557" stroke-opacity=".5">
+    <rect x="16" y="16" width="368" height="468" stroke-width="1"/>
+    <path d="M200 214 236 250 200 286 164 250Z" stroke-width="1.5"/>
+  </g>
+  <text x="200" y="330" font-family="Georgia, serif" font-size="20" fill="#8A6B3A"
+        text-anchor="middle" opacity=".75">2</text>
+</svg>
