@@ -528,7 +528,9 @@ a { color: inherit; }
 }
 
 .env-flower {
-    width: clamp(160px, 46vw, 320px);
+    /* Capped by viewport height (svh) as well as width, so it can't get
+       tall enough to run off the bottom on short phone screens. */
+    width: clamp(90px, min(36vw, 22svh), 260px);
     height: auto;
     opacity: 0.9;
     position: relative;
