@@ -136,12 +136,14 @@ a { color: inherit; }
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-lg);
-    /* Extra bottom padding pulls the centred group up a touch, making room
-       for the flower decor under the tap hint without crowding it. Left off
-       on narrow screens (below), where the letter needs all the headroom
-       above the envelope it can get. */
-    padding: var(--space-md) var(--gutter) calc(var(--space-md) + var(--space-xl));
+    gap: var(--space-md);
+    /* Balanced vertical padding, and a modest gap. The group already carries
+       the letter's rise headroom (the stage's padding-top) at its very top, so
+       on shorter desktop viewports it was overflowing — the extra bottom
+       padding and the wider gaps pushed that headroom clean off the top edge,
+       clipping the letter as it rose. Keeping the group compact and centred
+       keeps the headroom on screen. */
+    padding: var(--space-md) var(--gutter);
     z-index: 100;
 }
 
