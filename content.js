@@ -30,6 +30,7 @@ const CONTENT = {
     ro: {
         'a11y.open': 'Deschide invitația',
         'a11y.lang': 'Schimbă limba',
+        'a11y.close': 'Închide',
 
         'envelope.eyebrow': 'Sunteți invitați',
         'envelope.hint': 'apasă sigiliul pentru a deschide',
@@ -72,6 +73,7 @@ const CONTENT = {
     en: {
         'a11y.open': 'Open the invitation',
         'a11y.lang': 'Switch language',
+        'a11y.close': 'Close',
 
         'envelope.eyebrow': 'You are invited',
         'envelope.hint': 'tap the seal to open',
