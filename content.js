@@ -3,11 +3,6 @@
 //
 //  To change any wording, edit this file — nothing else. Each key below
 //  matches a data-i18n="..." attribute in index.html.
-//
-//  STILL TO FILL IN, elsewhere in the project:
-//    - the RSVP link (href in index.html, currently YOUR_GOOGLE_FORM_LINK)
-//    - the map links (hrefs in index.html, currently REPLACE+WITH+ADDRESS)
-//    - YOUR_SITE_URL in the share-preview tags in index.html
 // ============================================================================
 
 // When it all happens. Drives the countdown; the calendar file has its own
@@ -18,12 +13,12 @@ const WEDDING = '2026-10-03T16:00:00+03:00';
 // anything the browser can display works, and the grid crops them to 3:2
 // (landscape) rather than a portrait ratio.
 const GALLERY = [
-    'img/1london.jpeg',
-    'img/2iceland.jpeg',
-    'img/3stockholm.jpeg',
-    'img/4london.jpeg',
-    'img/5iceland.jpeg',
-    'img/6hinterstoder.jpeg'
+    'img/1london.webp',
+    'img/2iceland.webp',
+    'img/3stockholm.webp',
+    'img/4london.webp',
+    'img/5iceland.webp',
+    'img/6hinterstoder.webp'
 ];
 
 const CONTENT = {
