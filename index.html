@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=62">
+    <link rel="stylesheet" href="style.css?v=63">
 
     <!-- Text is injected from content.js, so with JS off there is nothing to
          show. Hide the envelope and explain, rather than sit on a dead page. -->
@@ -219,14 +219,15 @@
     </section>
 
     <footer class="footer">
-        <!-- Easter egg (Bogi the cat). The photo stays hidden until you reach
-             the very bottom, then pounces in, centred below the names. It's a
-             transparent WebP cut-out; swap the src if the picture changes. The
-             slot is fixed-height with object-fit: contain, so any crop drops in
-             without the layout needing to know its proportions. Decorative, so
-             aria-hidden. -->
+        <!-- Easter egg (Bogi the cat). Hidden until tapped: a blinking prompt
+             invites the tap, and only then does the photo pounce in, centred
+             below the names. It's a transparent WebP cut-out; swap the src if
+             the picture changes. The slot is fixed-height with object-fit:
+             contain, so any crop drops in without the layout needing to know
+             its proportions. -->
         <p><span class="footer-names">Ioana <span class="amp">&amp;</span> Rareș</span> · 3.10.2026</p>
-        <img class="footer-cat reveal footer-egg" src="img/bogi.webp" alt="" aria-hidden="true">
+        <button type="button" class="footer-egg-btn" id="footer-egg-btn" data-i18n="footer.egg"></button>
+        <img class="footer-cat" id="footer-cat" src="img/bogi2.webp" alt="" data-i18n-alt="footer.egg.alt">
     </footer>
 
 </div>
@@ -239,7 +240,7 @@
     <img class="lightbox-img" id="lightbox-img" src="" alt="">
 </div>
 
-<script src="content.js?v=35"></script>
-<script src="script.js?v=21"></script>
+<script src="content.js?v=36"></script>
+<script src="script.js?v=22"></script>
 </body>
 </html>

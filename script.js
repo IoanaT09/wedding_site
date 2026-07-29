@@ -267,6 +267,19 @@ if (!updateCountdown()) {
     setInterval(updateCountdown, 30000);
 }
 
+// ============ Easter egg (Bogi the cat) ============
+// Tapping the blinking prompt swaps it for the photo — a one-shot reveal,
+// not a toggle, so the surprise doesn't wear off into a show/hide button.
+const footerEggBtn = document.getElementById('footer-egg-btn');
+const footerCat = document.getElementById('footer-cat');
+
+if (footerEggBtn && footerCat) {
+    footerEggBtn.addEventListener('click', () => {
+        footerEggBtn.classList.add('is-hidden');
+        footerCat.classList.add('is-shown');
+    });
+}
+
 // ============ Scroll reveal ============
 // Note: .reveal is never placed on a language-swapped element — a hidden element
 // never intersects, so it would stay invisible after switching language.

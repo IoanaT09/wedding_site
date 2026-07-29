@@ -1025,11 +1025,38 @@ a { color: inherit; }
 
 /* ---- Easter egg: Bogi the cat ---- */
 
-/* Bogi appears centred below the names, as the last thing on the page. Fixed
-   height + object-fit: contain means any crop of the real photo drops in
-   without the layout needing to know its proportions. */
-.footer-cat {
+/* A quiet, blinking prompt below the names. Nothing gives away what tapping
+   it does — that's the point. Hidden once tapped, in favour of the cat. */
+.footer-egg-btn {
     display: block;
+    margin: var(--space-lg) auto 0;
+    background: none;
+    border: none;
+    padding: var(--space-2xs);
+    font-family: var(--utility);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    color: inherit;
+    cursor: pointer;
+    animation: egg-blink 1.6s ease-in-out infinite;
+}
+.footer-egg-btn:hover,
+.footer-egg-btn:focus-visible {
+    opacity: 1;
+    animation-play-state: paused;
+}
+.footer-egg-btn.is-hidden { display: none; }
+
+@keyframes egg-blink {
+    0%, 100% { opacity: 0.9; }
+    50%      { opacity: 0.2; }
+}
+
+/* Bogi stays out of the layout until tapped, then pounces in centred below
+   the names. Fixed height + object-fit: contain means any crop of the real
+   photo drops in without the layout needing to know its proportions. */
+.footer-cat {
+    display: none;
     margin: var(--space-lg) auto 0;
     height: clamp(140px, 38vw, 220px);
     width: auto;
@@ -1038,21 +1065,19 @@ a { color: inherit; }
     transform-origin: center bottom;
     pointer-events: none;
 }
-
-/* Pounces in once the footer is reached. The reveal is driven by the existing
-   IntersectionObserver (it toggles .visible on every .reveal), but instead of
-   the standard fade-up transition it gets a little pounce. The delay is the
-   "you reached the very bottom, then — pop" beat; `both` keeps it hidden
-   through it. transition:none stops the base .reveal fade from also running. */
-.footer-egg { transition: none; }
-.footer-egg.visible {
-    animation: cat-pounce 0.55s var(--ease-out) 0.35s both;
+.footer-cat.is-shown {
+    display: block;
+    animation: cat-pounce 0.55s var(--ease-out) both;
 }
 
 @keyframes cat-pounce {
     0%   { opacity: 0; transform: translateY(10px) scale(0.55); }
     62%  { opacity: 1; transform: translateY(-4px) scale(1.08); }
     100% { opacity: 1; transform: translateY(0)    scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .footer-egg-btn { animation: none; }
+    .footer-cat.is-shown { animation: none; }
 }
 
 /* ===========================================================================
