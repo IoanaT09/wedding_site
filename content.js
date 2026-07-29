@@ -18,12 +18,12 @@ const WEDDING = '2026-10-03T16:00:00+03:00';
 // anything the browser can display works, and the grid crops them to 3:2
 // (landscape) rather than a portrait ratio.
 const GALLERY = [
-    'img/1london.jpeg',
-    'img/2iceland.jpeg',
-    'img/3stockholm.jpeg',
-    'img/4london.jpeg',
-    'img/5iceland.jpeg',
-    'img/6hinterstoder.jpeg'
+    'img/1london.webp',
+    'img/2iceland.webp',
+    'img/3stockholm.webp',
+    'img/4london.webp',
+    'img/5iceland.webp',
+    'img/6hinterstoder.webp'
 ];
 
 const CONTENT = {
