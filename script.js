@@ -198,7 +198,7 @@ function icsStamp(date) {
 function buildIcs() {
     const dict = CONTENT[currentLang];
     const start = new Date(WEDDING);
-    const end = new Date(start.getTime() + 9 * 3600 * 1000);   // through the reception
+    const end = new Date(start.getTime() + 12 * 3600 * 1000);  // through the reception, until 4am
 
     const description = [
         dict['details.ceremony.label'] + ': ' + dict['details.ceremony.value'],
