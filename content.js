@@ -35,9 +35,9 @@ const CONTENT = {
 
         'welcome.body': 'Vă invităm, împreună cu părinții noștri, să participați la momentul în care două vieți devin una, două jumătăți devin un întreg, doi prieteni devin soț și soție.',
         'welcome.godparents.intro': 'Ne bucurăm să îi avem ca nași pe',
-        'welcome.godparents.pair1.names': 'George și Mandy',
+        'welcome.godparents.pair1.names': 'George & Mandy',
         'welcome.godparents.pair1.surname': 'Tămaș',
-        'welcome.godparents.pair2.names': 'Mihai Greblă și',
+        'welcome.godparents.pair2.names': 'Mihai Greblă &',
         'welcome.godparents.pair2.surname': 'Iulia Tuduce',
 
         'details.date': '3 Octombrie 2026',
@@ -81,9 +81,9 @@ const CONTENT = {
 
         'welcome.body': 'Together with our parents, we invite you to witness the moment two lives become one, two halves become whole, and two friends become husband and wife.',
         'welcome.godparents.intro': "We're delighted to have as godparents",
-        'welcome.godparents.pair1.names': 'George and Mandy',
+        'welcome.godparents.pair1.names': 'George & Mandy',
         'welcome.godparents.pair1.surname': 'Tămaș',
-        'welcome.godparents.pair2.names': 'Mihai Greblă and',
+        'welcome.godparents.pair2.names': 'Mihai Greblă &',
         'welcome.godparents.pair2.surname': 'Iulia Tuduce',
 
         'details.date': '3 October 2026',
