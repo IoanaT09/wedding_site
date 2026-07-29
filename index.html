@@ -8,14 +8,17 @@
     <meta name="theme-color" content="#3A1420">
     <link rel="icon" href="seal.svg">
 
-    <!-- Link preview for WhatsApp, iMessage and the rest. REPLACE YOUR_SITE_URL
-         with the real address once it's hosted — scrapers need absolute URLs. -->
+    <!-- Link preview for WhatsApp, iMessage and the rest. Scrapers need
+         absolute URLs, so these point at the live GitHub Pages address. -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Ioana &amp; Rareș · 3.10.2026">
     <meta property="og:description" content="Ne căsătorim și ne-ar bucura să fiți alături de noi. · We're getting married and would love you to be there.">
-    <meta property="og:image" content="YOUR_SITE_URL/img/hero-photo.jpg">
-    <meta property="og:url" content="YOUR_SITE_URL/">
+    <meta property="og:image" content="https://ioanat09.github.io/wedding_site/img/share-preview.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://ioanat09.github.io/wedding_site/">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://ioanat09.github.io/wedding_site/img/share-preview.jpg">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,7 +89,7 @@
     </div>
 
     <p class="tap-hint" data-i18n="envelope.hint"></p>
-    <img class="env-flower" src="img/flower decor.png" alt="" aria-hidden="true">
+    <img class="env-flower" src="img/flower-decor.webp" alt="" aria-hidden="true">
 </div>
 
 <!-- ===================== SITE ===================== -->
@@ -221,7 +224,15 @@
 
 </div>
 
-<script src="content.js?v=34"></script>
-<script src="script.js?v=20"></script>
+<!-- Gallery lightbox — tap a photo to see it full size. Starts empty and
+     hidden; script.js fills in the image and opens it, and closing returns
+     focus to the photo that was tapped. -->
+<div id="lightbox" class="lightbox" aria-hidden="true">
+    <button type="button" class="lightbox-close" id="lightbox-close" data-i18n-aria-label="a11y.close"></button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="">
+</div>
+
+<script src="content.js?v=35"></script>
+<script src="script.js?v=21"></script>
 </body>
 </html>
