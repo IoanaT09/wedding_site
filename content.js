@@ -62,7 +62,10 @@ const CONTENT = {
 
         'rsvp.eyebrow': 'Vă rugăm confirmați până la',
         'rsvp.deadline': '1 Septembrie 2026',
-        'rsvp.button': 'Confirmă prezența'
+        'rsvp.button': 'Confirmă prezența',
+
+        'footer.egg': 'apasă aici',
+        'footer.egg.alt': 'Bogi'
     },
 
     en: {
@@ -105,6 +108,9 @@ const CONTENT = {
 
         'rsvp.eyebrow': 'Kindly reply by',
         'rsvp.deadline': '1 September 2026',
-        'rsvp.button': 'RSVP'
+        'rsvp.button': 'RSVP',
+
+        'footer.egg': 'click here',
+        'footer.egg.alt': 'Bogi'
     }
 };
