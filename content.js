@@ -3,11 +3,6 @@
 //
 //  To change any wording, edit this file — nothing else. Each key below
 //  matches a data-i18n="..." attribute in index.html.
-//
-//  STILL TO FILL IN, elsewhere in the project:
-//    - the RSVP link (href in index.html, currently YOUR_GOOGLE_FORM_LINK)
-//    - the map links (hrefs in index.html, currently REPLACE+WITH+ADDRESS)
-//    - YOUR_SITE_URL in the share-preview tags in index.html
 // ============================================================================
 
 // When it all happens. Drives the countdown; the calendar file has its own
