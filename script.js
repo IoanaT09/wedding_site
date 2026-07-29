@@ -102,6 +102,12 @@ function buildGallery() {
         figure.dataset.reveal = 'fade-up';
         figure.style.setProperty('--i', i % 3);
 
+        // The tile opens the photo full-size, so it's a control: focusable,
+        // announced as a button, and openable with Enter/Space (see below).
+        figure.tabIndex = 0;
+        figure.setAttribute('role', 'button');
+        figure.dataset.i18nAriaLabel = 'gallery.alt';
+
         const img = document.createElement('img');
         img.src = src;
         // setAttribute rather than the property: the attribute is what the
@@ -118,6 +124,63 @@ function buildGallery() {
 
 buildGallery();
 setLang(currentLang);   // fills in the alt text on the tiles just created
+
+// ============ Gallery lightbox ============
+// Tapping a photo opens it full-size over a dark backdrop. The backdrop, the
+// close button and Escape all dismiss it; focus moves to the close button on
+// open and back to the tapped photo on close, so keyboard use round-trips.
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const lightboxClose = document.getElementById('lightbox-close');
+let lightboxReturn = null;   // element focus goes back to on close
+
+function openLightbox(tile) {
+    const img = tile.querySelector('img');
+    if (!img || !lightbox) return;
+    lightboxImg.src = img.currentSrc || img.src;
+    lightboxImg.alt = img.alt;
+    lightboxReturn = tile;
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    lightboxClose.focus();
+}
+
+function closeLightbox() {
+    if (!lightbox || !lightbox.classList.contains('is-open')) return;
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    lightboxImg.removeAttribute('src');       // don't keep the big image decoded
+    if (lightboxReturn) lightboxReturn.focus();
+    lightboxReturn = null;
+}
+
+if (galleryGrid && lightbox) {
+    // One listener on the grid rather than one per tile; works for tiles added
+    // by buildGallery without re-wiring.
+    galleryGrid.addEventListener('click', (e) => {
+        const tile = e.target.closest('.gallery-item');
+        if (tile) openLightbox(tile);
+    });
+    galleryGrid.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const tile = e.target.closest('.gallery-item');
+        if (!tile) return;
+        e.preventDefault();                   // Space must not scroll the page
+        openLightbox(tile);
+    });
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    // Only a click on the backdrop itself closes — clicks on the photo bubble
+    // up with target === the image, so they're ignored.
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
+    });
+}
 
 // ============ Add to calendar ============
 // The .ics is assembled on demand from the same dictionary entries the page

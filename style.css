@@ -895,6 +895,73 @@ a { color: inherit; }
     transition: transform 0.6s var(--ease-out);
 }
 .gallery-item:hover img { transform: scale(1.04); }
+/* Photos open full-size in the lightbox — hint it, and give keyboard users
+   a visible focus ring since the tile is now an interactive control. */
+.gallery-item { cursor: zoom-in; }
+.gallery-item:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+}
+
+/* ===========================================================================
+   LIGHTBOX — tap a gallery photo to see it full size
+   ======================================================================== */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;                /* .is-open switches this to flex */
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-lg);
+    background: rgba(34, 36, 30, 0.92);
+    cursor: zoom-out;             /* clicking the backdrop closes it */
+}
+.lightbox.is-open {
+    display: flex;
+    animation: lightbox-in 0.25s var(--ease-out) both;
+}
+.lightbox-img {
+    max-width: min(94vw, 1100px);
+    max-height: 88svh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 2px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+    cursor: default;             /* clicking the photo itself must not close */
+}
+.lightbox-close {
+    position: absolute;
+    top: clamp(0.75rem, 3vw, 1.5rem);
+    right: clamp(0.75rem, 3vw, 1.5rem);
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 240, 0.12);
+    color: var(--paper);
+    font-size: 1.7rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+.lightbox-close::before { content: "\00d7"; }   /* × */
+.lightbox-close:hover,
+.lightbox-close:focus-visible {
+    background: rgba(255, 255, 240, 0.26);
+    outline: none;
+}
+@keyframes lightbox-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lightbox.is-open { animation: none; }
+}
 
 .detail-label {
     font-family: var(--utility);
